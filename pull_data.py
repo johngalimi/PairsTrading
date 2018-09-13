@@ -23,8 +23,6 @@ def industry_dataframe(industry, years):
             stock = web.DataReader(ticker, 'iex', start)['close']
             pricing_data[ticker] = stock
         except:
-            # Maybe skip rather than fill w/ zeros -> what if 1st throws error
-            # pricing_data[ticker] = np.zeros(len(pricing_data.index))
             pass
         
     pricing_data.to_csv('Data/' + industry + '.csv')
