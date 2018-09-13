@@ -45,34 +45,3 @@ def visualize_relationship(sec_a, sec_b):
     
 visualize_relationship('SRE', 'ETR')
     
-
- 
-#test1 = 'PG'
-#test2 = 'HSY'
-#
-#print(coint(pricing_data[test1], pricing_data[test2]))
-#
-#testdf = pricing_data[[test1, test2]]
-#testdf['spread'] = testdf[test1] / testdf[test2]
-#testdf['zscore'] = (testdf['spread'] - testdf['spread'].mean())/(np.std(testdf['spread']))
-# 
-#print(testdf.head())
-#
-#fig = plt.figure()
-#
-#ax1 = plt.subplot2grid((2, 2), (0, 0), colspan=2, rowspan=1)
-#
-#testdf[test1].plot(label=test1)
-#testdf[test2].plot(label=test2)
-#
-#ax1.legend()
-#
-#ax2 = plt.subplot2grid((2, 2), (1, 0), colspan=2, rowspan=1)
-#
-#testdf['zscore'].plot()
-#plt.axhline(testdf['zscore'].mean(), color='black')
-#plt.axhline(1.0, color='red')
-#plt.axhline(-1.0, color='red')
-#
-#plt.legend()
-#plt.show()
