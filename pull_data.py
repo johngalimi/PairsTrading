@@ -1,5 +1,4 @@
 from datetime import datetime
-import numpy as np
 import pandas as pd
 pd.core.common.is_list_like = pd.api.types.is_list_like
 import pandas_datareader.data as web
@@ -35,6 +34,7 @@ def generate_files():
     
     for sector in sector_list:
         industry_dataframe(sector, years_back)
+     
         
 generate_files()
 

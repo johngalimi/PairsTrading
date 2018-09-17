@@ -1,27 +1,37 @@
+from datetime import datetime
 import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
 pd.options.mode.chained_assignment = None
 
+plt.style.use('default')
+
 pair_df = pd.read_csv('candidate_pairs.csv', index_col=False)
 
 pair_df = pair_df.iloc[:, 1:]
 
-print(pair_df.tail(5))
 
-def visualize_relationship(sec_a, sec_b):
+def visualize_relationship(sec_a, sec_b, days_1, days_2):
     
-    pricing_data = pd.read_csv('Data/' + 
-            pair_df['industry'][pair_df['security1']==sec_a].unique()[0] + '.csv')
+    pair_industry = pair_df['industry'][pair_df['security1']==sec_a].unique()[0]
+    
+    pricing_data = pd.read_csv('Data/' + pair_industry + '.csv')
     
     pricing_data.index = pricing_data['date']
     
     try_pair = pricing_data[[sec_a, sec_b]]
     try_pair['spread'] = try_pair[sec_a] / try_pair[sec_b]
 
+    # This implicitly assumes normal dist when, in reality, financial data may not be
     try_pair['zscore'] = (try_pair['spread'] - try_pair['spread'].mean())/(np.std(try_pair['spread']))
     
-    fig = plt.figure()
+    window_1 = days_1
+    window_2 = days_2
+    
+    try_pair[str(window_1) + 'D MA zscore'] = try_pair['zscore'].rolling(window=window_1).mean()
+    try_pair[str(window_2) + 'D MA zscore'] = try_pair['zscore'].rolling(window=window_2).mean()
+    
+#    fig = plt.figure()
     
     ax1 = plt.subplot2grid((2, 2), (0, 0), colspan=2, rowspan=1)
     
@@ -33,6 +43,8 @@ def visualize_relationship(sec_a, sec_b):
     ax2 = plt.subplot2grid((2, 2), (1, 0), colspan=2, rowspan=1)
     
     try_pair['zscore'].plot(label=sec_a + ' / ' + sec_b)
+    try_pair[str(window_1) + 'D MA zscore'].plot()
+    try_pair[str(window_2) + 'D MA zscore'].plot()
     plt.axhline(try_pair['zscore'].mean(), color='black')
     plt.axhline(1.0, color='red')
     plt.axhline(-1.0, color='red')
@@ -40,8 +52,34 @@ def visualize_relationship(sec_a, sec_b):
     ax2.legend()
     
     plt.legend()
-    plt.show()
-        
     
-visualize_relationship('SRE', 'ETR')
+    plt.tight_layout()
+    
+    today = datetime.now()
+    
+    plt.savefig('Pairs/' + str(today.year) + str(today.month) + str(today.day) +
+                '_' + pair_industry.replace(' ', '') + '_' + sec_a + '_' + sec_b + '.pdf', 
+                bbox_inches='tight')
+    
+    
+for i in range(0, len(pair_df)):
+    stock_a = pair_df['security1'].iloc[i]
+    stock_b = pair_df['security2'].iloc[i]
+    
+    print(stock_a, stock_b)
+    
+    visualize_relationship(stock_a, stock_b, 25, 100)
+    
+# TESTING
+    
+#first_stock = ['TMO', 'GS', 'CRM']
+#second_stock = ['PKI', 'LNC', 'INTU']
+#
+#for i in range(0, len(first_stock)):
+#    visualize_relationship(first_stock[i], second_stock[i], 25, 100)
+
+    
+
+
+
     
