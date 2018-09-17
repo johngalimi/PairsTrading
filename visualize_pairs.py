@@ -1,8 +1,12 @@
+import os
 from datetime import datetime
 import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
 pd.options.mode.chained_assignment = None
+
+today = datetime.now()
+today_date = str(today.year) + str(today.month) + str(today.day)
 
 plt.style.use('default')
 
@@ -55,20 +59,27 @@ def visualize_relationship(sec_a, sec_b, days_1, days_2):
     
     plt.tight_layout()
     
-    today = datetime.now()
-    
-    plt.savefig('Pairs/' + str(today.year) + str(today.month) + str(today.day) +
-                '_' + pair_industry.replace(' ', '') + '_' + sec_a + '_' + sec_b + '.pdf', 
+    plt.savefig('Pairs/' + today_date + '/' + pair_industry.replace(' ', '') + '_' + sec_a + '_' + sec_b + '.pdf', 
                 bbox_inches='tight')
+
+
+def generate_files():   
     
+    try:
+        os.makedirs('Pairs/' + today_date)
+    except FileExistsError:
+        pass
     
-for i in range(0, len(pair_df)):
-    stock_a = pair_df['security1'].iloc[i]
-    stock_b = pair_df['security2'].iloc[i]
+    for i in range(0, len(pair_df)):
+        stock_a = pair_df['security1'].iloc[i]
+        stock_b = pair_df['security2'].iloc[i]
+        
+        print(stock_a, stock_b)
+        
+        visualize_relationship(stock_a, stock_b, 25, 100)
     
-    print(stock_a, stock_b)
-    
-    visualize_relationship(stock_a, stock_b, 25, 100)
+
+generate_files()
     
 # TESTING
     
