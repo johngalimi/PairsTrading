@@ -6,7 +6,7 @@ from statsmodels.tsa.stattools import coint
 
 years_back = 5
 
-snp_500 = pd.read_csv('Input/spy_holdings.csv')
+snp_500 = pd.read_csv('input/spy_holdings.csv')
 
 
 def industry_dataframe(industry, years):
@@ -42,7 +42,7 @@ def find_pairs(industry, pairs):
 
 # TODO -> Return Pandas Df from industry_dataframe fxn rather than re-reading csv
     
-    pricing_data = pd.read_csv('Data/' + industry + '.csv')
+    pricing_data = pd.read_csv('data/' + industry + '.csv')
     pricing_data.index = pricing_data['date']
     
     candidates = pricing_data.columns.tolist()
@@ -90,7 +90,7 @@ def locate_pairs():
     pair_df = pd.DataFrame(pair_list, 
                            columns=['industry', 'security1', 'security2', 'pvalue'])
     
-    pair_df.to_csv('Pairs/Candidates/candidate_pairs.csv')
+    pair_df.to_csv('pairs/candidates/candidate_pairs.csv')
     
     
 locate_pairs()

@@ -10,7 +10,7 @@ today_date = str(today.year) + str(today.month) + str(today.day)
 
 plt.style.use('default')
 
-pair_df = pd.read_csv('Pairs/Candidates/candidate_pairs.csv', index_col=False)
+pair_df = pd.read_csv('pairs/candidates/candidate_pairs.csv', index_col=False)
 
 pair_df = pair_df.iloc[:, 1:]
 
@@ -19,7 +19,7 @@ def visualize_relationship(sec_a, sec_b, days_1, days_2):
     
     pair_industry = pair_df['industry'][pair_df['security1']==sec_a].unique()[0]
     
-    pricing_data = pd.read_csv('Data/' + pair_industry + '.csv')
+    pricing_data = pd.read_csv('data/' + pair_industry + '.csv')
     
     pricing_data.index = pricing_data['date']
     
@@ -59,14 +59,14 @@ def visualize_relationship(sec_a, sec_b, days_1, days_2):
     
     plt.tight_layout()
     
-    plt.savefig('Pairs/' + today_date + '/' + pair_industry.replace(' ', '') + 
+    plt.savefig('pairs/' + today_date + '/' + pair_industry.replace(' ', '') + 
                 '_' + sec_a + '_' + sec_b + '.pdf', bbox_inches='tight')
 
 
 def generate_files():   
     
     try:
-        os.makedirs('Pairs/' + today_date)
+        os.makedirs('pairs/' + today_date)
     except FileExistsError:
         pass
     
