@@ -10,7 +10,7 @@ today_date = str(today.year) + str(today.month) + str(today.day)
 
 plt.style.use('default')
 
-pair_df = pd.read_csv('candidate_pairs.csv', index_col=False)
+pair_df = pd.read_csv('Pairs/Candidates/candidate_pairs.csv', index_col=False)
 
 pair_df = pair_df.iloc[:, 1:]
 
@@ -59,8 +59,8 @@ def visualize_relationship(sec_a, sec_b, days_1, days_2):
     
     plt.tight_layout()
     
-    plt.savefig('Pairs/' + today_date + '/' + pair_industry.replace(' ', '') + '_' + sec_a + '_' + sec_b + '.pdf', 
-                bbox_inches='tight')
+    plt.savefig('Pairs/' + today_date + '/' + pair_industry.replace(' ', '') + 
+                '_' + sec_a + '_' + sec_b + '.pdf', bbox_inches='tight')
 
 
 def generate_files():   
