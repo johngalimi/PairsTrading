@@ -90,7 +90,7 @@ def locate_pairs():
     pair_df = pd.DataFrame(pair_list, 
                            columns=['industry', 'security1', 'security2', 'pvalue'])
     
-    pair_df.to_csv('pairs_data/candidates/candidate_pairs.csv')
+    pair_df.to_csv('fin_data/candidate_pairs.csv')
     
     
 locate_pairs()

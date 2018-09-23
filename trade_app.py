@@ -8,15 +8,15 @@ import matplotlib.pyplot as plt
 
 plt.style.use('default')
 
-pairs = pd.read_csv('pairs_data/candidates/candidate_pairs.csv', index_col=False)
+pairs = pd.read_csv('fin_data/candidate_pairs.csv', index_col=False)
 
 today = datetime.now()
 today_date = str(today.year) + str(today.month) + str(today.day)
 
-stock_1 = 'FB'
-stock_2 = 'KLAC'
-days_1 = 30
-days_2 = 90
+stock_1 = 'PNC'
+stock_2 = 'SCHW'
+days_1 = 10
+days_2 = 30
 
 
 def pair_analysis(security_a, security_b, days_a, days_b):
@@ -53,6 +53,8 @@ def visualize(zscore_df):
     days_a = labels[4].split()[0]
     days_b = labels[5].split()[0]
     
+    fig = plt.figure()
+    
     ax1 = plt.subplot2grid((2, 2), (0, 0), colspan=2, rowspan=1)
     
     try_pair[labels[0]].plot(label=labels[0])
@@ -85,8 +87,10 @@ def visualize(zscore_df):
     
     plt.tight_layout()
     
-    plt.savefig('pairs_data/' + today_date + '/' + industry.replace(' ', '') + 
-                '_' + security_a + '_' + security_b + '.pdf', bbox_inches='tight')
+    fig.dpi = 100
+    
+#    plt.savefig('pairs_data/' + today_date + '/' + industry.replace(' ', '') + 
+#                '_' + security_a + '_' + security_b + '.pdf', bbox_inches='tight', dpi=fig.dpi)
     
     plt.show()
 
@@ -121,7 +125,6 @@ def generate_trades(zscore_df):
     candidate_pair['buy_ratio'] = np.where(candidate_pair['zscore'] < -1, 1, 0)
     candidate_pair['sell_ratio'] = np.where(candidate_pair['zscore'] > 1, 1, 0)
     
-    
     candidate_pair['zscore'].plot(lw=1.5)
     plt.axhline(candidate_pair['zscore'].mean(), color='black')
     plt.axhline(1.0, color='purple', ls='--')
@@ -139,11 +142,11 @@ def generate_trades(zscore_df):
 
 
 test_df = pair_analysis(stock_1, stock_2, days_1, days_2)
+visualize(test_df)
 
-generate_trades(test_df)
+#generate_trades(test_df)
 
-#all_candidates_visualize()
-#visualize(pair_analysis(test_df))
+
         
 
 
