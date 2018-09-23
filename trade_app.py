@@ -37,8 +37,8 @@ def pair_analysis(security_a, security_b, days_a, days_b):
     # This implicitly assumes normal dist when, in reality, financial data may not be
     pair_df['zscore'] = (pair_df['spread'] - pair_df['spread'].mean())/(np.std(pair_df['spread']))
     
-    pair_df[str(days_a) + 'D MA zscore'] = pair_df['zscore'].rolling(window=days_a).mean()
-    pair_df[str(days_b) + 'D MA zscore'] = pair_df['zscore'].rolling(window=days_b).mean()
+    pair_df[str(days_a) + '_ma_zscore'] = pair_df['zscore'].rolling(window=days_a).mean()
+    pair_df[str(days_b) + '_ma_zscore'] = pair_df['zscore'].rolling(window=days_b).mean()
     
     return pair_df, industry
 
@@ -72,8 +72,8 @@ def visualize(zscore_df):
     ax2 = plt.subplot2grid((2, 2), (1, 0), colspan=2, rowspan=1)
     
     try_pair['zscore'].plot(label=security_a + ' / ' + security_b)
-    try_pair[days_a + ' MA zscore'].plot()
-    try_pair[days_b + ' MA zscore'].plot()
+    try_pair[days_a + '_ma_zscore'].plot()
+    try_pair[days_b + '_ma_zscore'].plot()
     plt.axhline(try_pair['zscore'].mean(), color='black')
     plt.axhline(1.0, color='red')
     plt.axhline(-1.0, color='red')
@@ -111,7 +111,7 @@ def all_candidates_visualize():
         visualize(pair_analysis(stock_a, stock_b, days_1, days_2))
         
 
-def generate_trades(zscore_df):
+def generate_trades(zscore_df, ma_window=0):
 
     candidate_pair, industry = zscore_df
     
@@ -122,18 +122,25 @@ def generate_trades(zscore_df):
     # If spread z-score > 1, SELL ratio (short sec_a, long sec_b)
     # b/c sec_a is outperforming while sec_b is underperforming (driving spread higher)
     
-    candidate_pair['buy_ratio'] = np.where(candidate_pair['zscore'] < -1, 1, 0)
-    candidate_pair['sell_ratio'] = np.where(candidate_pair['zscore'] > 1, 1, 0)
+    # need to find optimal time window to trade
+    if ma_window == 0:
+        feature_name = 'zscore'
+    else:
+        feature_name = str(ma_window) + '_ma_zscore'
     
-    candidate_pair['zscore'].plot(lw=1.5)
-    plt.axhline(candidate_pair['zscore'].mean(), color='black')
+    
+    candidate_pair['buy_ratio'] = np.where(candidate_pair[feature_name] < -1, 1, 0)
+    candidate_pair['sell_ratio'] = np.where(candidate_pair[feature_name] > 1, 1, 0)
+    
+    candidate_pair[feature_name].plot(lw=1.5)
+    plt.axhline(candidate_pair[feature_name].mean(), color='black')
     plt.axhline(1.0, color='purple', ls='--')
     plt.axhline(-1.0, color='purple', ls='--')
     
-    candidate_pair['zscore'][candidate_pair['buy_ratio']==1].plot(marker='o',
+    candidate_pair[feature_name][candidate_pair['buy_ratio']==1].plot(marker='o',
                   color='green', ls='None', ms=4)
     
-    candidate_pair['zscore'][candidate_pair['sell_ratio']==1].plot(marker='o',
+    candidate_pair[feature_name][candidate_pair['sell_ratio']==1].plot(marker='o',
                   color='red', ls='None', ms=4)
     
     plt.show()
@@ -142,9 +149,9 @@ def generate_trades(zscore_df):
 
 
 test_df = pair_analysis(stock_1, stock_2, days_1, days_2)
-visualize(test_df)
+#visualize(test_df)
 
-#generate_trades(test_df)
+generate_trades(test_df, days_1)
 
 
         
