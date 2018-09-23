@@ -4,6 +4,9 @@ import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
 
+print(plt.style.available)
+plt.style.use('default')
+
 pairs = pd.read_csv('pairs_data/candidates/candidate_pairs.csv', index_col=False)
 
 today = datetime.now()
@@ -22,6 +25,8 @@ def pair_analysis(security_a, security_b, days_a, days_b):
     historical_prices = pd.read_csv('fin_data/' + industry + '.csv')
     
     historical_prices.index = historical_prices['date']
+    
+    historical_prices.index = pd.to_datetime(historical_prices.index)
     
     pair_df = historical_prices.copy()
     pair_df = pair_df[[security_a, security_b]]
@@ -52,6 +57,11 @@ def visualize(zscore_df):
     try_pair[labels[0]].plot(label=labels[0])
     try_pair[labels[1]].plot(label=labels[1])
     
+    ax1.set_xlabel(try_pair.index)
+    
+    plt.xlabel('Date', fontsize=12)
+    plt.ylabel('Closing Price', fontsize=12)
+    
     ax1.legend()
     
     ax2 = plt.subplot2grid((2, 2), (1, 0), colspan=2, rowspan=1)
@@ -62,6 +72,9 @@ def visualize(zscore_df):
     plt.axhline(try_pair['zscore'].mean(), color='black')
     plt.axhline(1.0, color='red')
     plt.axhline(-1.0, color='red')
+    
+    plt.xlabel('Date', fontsize=12)
+    plt.ylabel('Z-Score', fontsize=12)
     
     ax2.legend()
     
@@ -89,9 +102,12 @@ def all_candidates_visualize():
         print(stock_a, stock_b)
         
         visualize(pair_analysis(stock_a, stock_b, days_1, days_2))
-    
 
-all_candidates_visualize()
-    
-    
 
+# all_candidates_visualize()    
+
+visualize(pair_analysis(stock_1, stock_2, days_1, days_2))
+        
+
+
+    
