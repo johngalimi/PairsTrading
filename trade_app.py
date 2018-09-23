@@ -4,7 +4,8 @@ import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
 
-print(plt.style.available)
+# TODO - identify optimal time to exit position - momentum strat on ma of zscores maybe?
+
 plt.style.use('default')
 
 pairs = pd.read_csv('pairs_data/candidates/candidate_pairs.csv', index_col=False)
@@ -59,6 +60,8 @@ def visualize(zscore_df):
     
     ax1.set_xlabel(try_pair.index)
     
+    plt.title(industry + ' - ' + security_a + ' & ' + security_b + ' - ' + today_date
+              , fontsize=18)
     plt.xlabel('Date', fontsize=12)
     plt.ylabel('Closing Price', fontsize=12)
     
@@ -102,12 +105,47 @@ def all_candidates_visualize():
         print(stock_a, stock_b)
         
         visualize(pair_analysis(stock_a, stock_b, days_1, days_2))
+        
+
+def generate_trades(zscore_df):
+
+    candidate_pair, industry = zscore_df
+    
+    # spread defined as sec_a / sec_b
+    
+    # If spread z-score < -1, BUY ratio (long sec_a, short sec_b)
+    # b/c sec_a is underperforming while sec_b is outperforming (driving spread lower)
+    # If spread z-score > 1, SELL ratio (short sec_a, long sec_b)
+    # b/c sec_a is outperforming while sec_b is underperforming (driving spread higher)
+    
+    candidate_pair['buy_ratio'] = np.where(candidate_pair['zscore'] < -1, 1, 0)
+    candidate_pair['sell_ratio'] = np.where(candidate_pair['zscore'] > 1, 1, 0)
+    
+    
+    candidate_pair['zscore'].plot(lw=1.5)
+    plt.axhline(candidate_pair['zscore'].mean(), color='black')
+    plt.axhline(1.0, color='purple', ls='--')
+    plt.axhline(-1.0, color='purple', ls='--')
+    
+    candidate_pair['zscore'][candidate_pair['buy_ratio']==1].plot(marker='o',
+                  color='green', ls='None', ms=4)
+    
+    candidate_pair['zscore'][candidate_pair['sell_ratio']==1].plot(marker='o',
+                  color='red', ls='None', ms=4)
+    
+    plt.show()
+    
+    return candidate_pair
 
 
-# all_candidates_visualize()    
+test_df = pair_analysis(stock_1, stock_2, days_1, days_2)
 
-visualize(pair_analysis(stock_1, stock_2, days_1, days_2))
+generate_trades(test_df)
+
+#all_candidates_visualize()
+#visualize(pair_analysis(test_df))
         
 
 
     
+
