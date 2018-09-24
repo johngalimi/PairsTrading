@@ -4,6 +4,9 @@ pd.core.common.is_list_like = pd.api.types.is_list_like
 import pandas_datareader.data as web
 from statsmodels.tsa.stattools import coint
 
+# TODO - need to eliminate stocks like F & UPS b/c coint to everything when low vol
+# TODO - refine algo to recheck for coint and throw out if mean varies too much over time
+
 years_back = 5
 
 snp_500 = pd.read_csv('input_data/spy_holdings.csv')
@@ -95,7 +98,6 @@ def locate_pairs():
     
 locate_pairs()
 
-# need to eliminate stocks like F & UPS b/c coint to everything when low vol
 
 
 
