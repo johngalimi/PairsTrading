@@ -5,6 +5,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 
 # TODO - identify optimal entry/exit signals
+# TODO - clean up identify trade conditional logic
 
 plt.style.use('default')
 
@@ -13,8 +14,8 @@ pairs = pd.read_csv('fin_data/candidate_pairs.csv', index_col=False)
 today = datetime.now()
 today_date = str(today.year) + str(today.month) + str(today.day)
 
-stock_1 = 'ALXN'
-stock_2 = 'MCK'
+stock_1 = 'GS'
+stock_2 = 'LNC'
 days_1 = 10
 days_2 = 30
 z_score = 1
@@ -85,8 +86,11 @@ def visualize(zscore_df):
     
     plt.tight_layout()
     
-    plt.savefig('pairs_data/' + today_date + '/' + industry.replace(' ', '') + 
+    try:
+        plt.savefig('pairs_data/' + today_date + '/' + industry.replace(' ', '') + 
                 '_' + security_a + '_' + security_b + '.pdf', bbox_inches='tight')
+    except FileNotFoundError:
+        pass
     
     plt.show()
 
@@ -191,6 +195,9 @@ test_df = pair_analysis(stock_1, stock_2, days_1, days_2)
 #visualize(test_df)
 
 identify_trades(test_df, days_1, days_2)
+    
+
+
 
 
         
