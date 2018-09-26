@@ -1,3 +1,8 @@
 # PairsTrading
 
-I designed a statistical arbitrage trading strategy commonly known as "Pairs Trading". Essentially, my algorithm groups equities in the S&P 500 by industry and identifies intra-sector pairs that are cointegrated. Once we establish that a historical relationship exists between two securities,  my algorithm exploits the notion that, over time, the "spread" between these two stocks will center around a fairly constant mean. When this spread widens too much (in either direction), my program places two equal (in $ terms) trades in opposite directions - it buys the underperforming security and sells the outperforming security. This trading strategy is considered "market neutral" because it is simply making a relative bet on the pair's movement and remains insulated from broader market movements.
+I designed a statistical arbitrage trading strategy commonly known as "Pairs Trading". My algorithm groups stocks in the S&P 500 by industry and applies multiple statistical tests (Cointegration Test & Augmented Dicky-Fuller (Stationarity) Test) to identify if a historical relationship exists between pairs of securities.
+
+If a relationship exists, my program monitors the "spread" between the two stocks and generates trades when the spread widens too much (with the expectation that the pair's spread will revert to its historical mean). To exploit this, my algorithm signals a BUY for the outperforming stock and a SELL for the underperformer.
+
+
+I maninly used pandas and numpy for the data analysis and matplotlib to handle the visualizations.
