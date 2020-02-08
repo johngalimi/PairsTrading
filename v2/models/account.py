@@ -14,12 +14,13 @@ class Account:
             new_position = Position(ticker, price, quantity)
             self.update_balance(-(price * quantity))
             self.positions.append(new_position)
-            print('transaction complete, remaining funds: {}'.format(self.balance))
+            print('transaction executed, remaining funds: {}'.format(self.balance))
         else:
             print("insufficient funds to complete transaction")
 
     def fund_account(self, amount):
         self.update_balance(amount)
+        print('funds updated, new account balance: {}'.format(self.balance))
 
     def view_portfolio(self):
         if len(self.positions) > 0:
@@ -37,3 +38,4 @@ if __name__ == '__main__':
     my_acct.enter_position('W', 80, 20)
     my_acct.enter_position('W', 80, 20)
     my_acct.view_portfolio()
+    my_acct.fund_account(5000)
