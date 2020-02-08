@@ -1,4 +1,5 @@
 from position import Position
+from stock import Stock
 
 class Account:
     def __init__(self):
@@ -8,11 +9,14 @@ class Account:
     def update_balance(self, amount):
         self.balance += amount
 
-    def enter_position(self, ticker, price, quantity):
+    def enter_position(self, ticker, quantity):
 
-        if self.balance > (price * quantity):
-            new_position = Position(ticker, price, quantity)
-            self.update_balance(-(price * quantity))
+        new_stock = Stock(ticker)
+        current_price = new_stock.get_current_price()
+
+        if self.balance > (current_price * quantity):
+            new_position = Position(ticker, current_price, quantity)
+            self.update_balance(-(current_price * quantity))
             self.positions.append(new_position)
             print('transaction executed, remaining funds: {}'.format(self.balance))
         else:
@@ -34,8 +38,8 @@ class Account:
 if __name__ == '__main__':
     my_acct = Account()
     my_acct.fund_account(10000)
-    my_acct.enter_position('AAPL', 300, 10)
-    my_acct.enter_position('W', 80, 20)
-    my_acct.enter_position('W', 80, 20)
+    my_acct.enter_position('AAPL', 10)
+    my_acct.enter_position('W', 20)
+    my_acct.enter_position('W', 20)
     my_acct.view_portfolio()
     my_acct.fund_account(5000)
