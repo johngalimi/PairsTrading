@@ -1,7 +1,6 @@
 class Stock:
     def __init__(self, ticker):
         self.ticker = ticker
-        self.price = self.get_current_price()
 
     def get_current_price(self):
         mock_stocks = {
