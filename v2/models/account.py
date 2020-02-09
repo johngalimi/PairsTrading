@@ -1,8 +1,7 @@
-from .position import Position
 from .transaction import Transaction
 from .stock import Stock
 from .base import Base
-from .position2 import Position2
+from .position import Position
 
 class Account(Base):
     def __init__(self, account_id):
@@ -26,7 +25,7 @@ class Account(Base):
                 if self.check_portfolio(ticker):
                     self.positions[ticker].update_position(quantity, new_transaction.transaction_id)
                 else:
-                    new_position = Position2(ticker, quantity, new_transaction.transaction_id)
+                    new_position = Position(ticker, quantity, new_transaction.transaction_id)
                     self.positions[ticker] = new_position
             else:
                 print("insufficient funds to complete transaction")
@@ -46,8 +45,6 @@ class Account(Base):
         new_transaction.get_details()
 
     def check_portfolio(self, ticker):
-        # check to see if stock already exists, if yes, add on to current position
-        # else, net new position
         if ticker in self.positions.keys():
             return True
         return False
