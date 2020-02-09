@@ -1,3 +1,4 @@
+import inspect
 import time
 import random
 from datetime import date
@@ -20,3 +21,7 @@ class Transaction(Base):
     def get_transaction_details(self):
         print(self.__dict__)
 
+    def inspect_instance(self):
+        signature = inspect.signature(self.__init__)
+        for name, parameter in signature.items():
+                print(name, parameter.default, parameter.annotation, parameter.kind)
