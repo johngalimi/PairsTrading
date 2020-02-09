@@ -4,7 +4,7 @@ from datetime import date
 
 from .base import Base
 
-class Position22(Base):
+class Position2(Base):
     def __init__(self, ticker, quantity):
         self.ticker = ticker
         self.quantity = quantity

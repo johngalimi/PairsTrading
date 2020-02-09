@@ -26,7 +26,7 @@ class Account(Base):
                 if self.check_portfolio(ticker):
                     self.positions[ticker].update_position(quantity, new_transaction.transaction_id)
                 else:
-                    new_position = Position2(ticker, current_price, quantity)
+                    new_position = Position2(ticker, quantity)
                     self.positions[ticker] = new_position
             else:
                 print("insufficient funds to complete transaction")
