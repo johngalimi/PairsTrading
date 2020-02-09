@@ -11,7 +11,6 @@ class Position(Base):
         self.initial_transaction = initial_transaction
         self.position_id = self.set_position_id()
         self.component_transactions = [self.initial_transaction]
-        # need to add initial transaction id when we open a position
     
     def set_position_id(self):
         unique_id = "{}{}{}".format(self.ticker, str(round(time.time())), str(random.randint(10, 99)))
@@ -20,5 +19,4 @@ class Position(Base):
     def update_position(self, transaction_quantity, transaction_id):
         self.quantity += transaction_quantity
         self.component_transactions.append(transaction_id)
-        # add logic for closing out a position to 0 shares
 

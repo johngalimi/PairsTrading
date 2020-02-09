@@ -25,3 +25,4 @@ class Transaction(Base):
         signature = inspect.signature(self.__init__)
         for name, parameter in signature.items():
                 print(name, parameter.default, parameter.annotation, parameter.kind)
+                
