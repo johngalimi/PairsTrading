@@ -45,34 +45,12 @@ class Account(Base):
         print('---> transaction executed:')
         new_transaction.get_details()
 
-    def enter_position(self, ticker, quantity):
-
-        new_stock = Stock(ticker)
-        current_price = new_stock.get_current_price()
-        transaction_value = current_price * quantity
-
-        if self.balance >= transaction_value:
-            new_position = Position(ticker, current_price, quantity)
-            self.update_balance(-transaction_value)
-
-            if self.check_portfolio(ticker):
-                self.positions[ticker].quantity += quantity
-            else:
-                self.positions[ticker] = new_position
-
-            print('transaction executed, remaining funds: {}'.format(self.balance))
-        else:
-            print("insufficient funds to complete transaction")
-
     def check_portfolio(self, ticker):
         # check to see if stock already exists, if yes, add on to current position
         # else, net new position
         if ticker in self.positions.keys():
             return True
         return False
-
-    def update_existing_position(self, quantity):
-        pass
 
     def fund_account(self, amount):
         self.update_balance(amount)
