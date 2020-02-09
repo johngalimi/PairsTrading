@@ -18,7 +18,6 @@ class Account(Base):
         transaction_value = current_price * quantity
 
         new_transaction = Transaction(action, ticker, current_price, quantity)
-        new_transaction.generate_id()
 
         if action == 'BUY':
             if self.balance >= transaction_value:
