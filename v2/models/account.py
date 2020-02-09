@@ -44,6 +44,8 @@ class Account(Base):
         print('---> transaction executed:')
         new_transaction.get_details()
 
+        self.clean_positions()
+
     def check_portfolio(self, ticker):
         if ticker in self.positions.keys():
             return True
@@ -61,4 +63,11 @@ class Account(Base):
         else:
             print('no positions to display')
         print('total investable cash: {}'.format(self.balance))
+
+    def clean_positions(self):
+        print('---> cleaning portfolio')
+        new_positions = {ticker: position for (ticker, position) in self.positions.items() if self.positions[ticker].quantity > 0}
+        self.positions = new_positions
+
+                
 

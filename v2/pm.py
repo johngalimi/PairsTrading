@@ -11,5 +11,7 @@ if __name__ == '__main__':
     acct2.execute_transaction('BUY', 'W', 30)
     acct2.execute_transaction('SELL', 'AAPL', 5)
     acct2.view_portfolio()
+    acct2.execute_transaction('SELL', 'AAPL', 5)
     acct2.fund_account(5000)
+    acct2.view_portfolio()
 
