@@ -3,5 +3,5 @@
 echo welcome to fast_git
 git status
 git add .
-git commit -m "commit w fast_git"
+git commit -m "fast_git commit:"
 git push
