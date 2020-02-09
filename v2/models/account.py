@@ -1,8 +1,9 @@
-from position import Position
-from transaction import Transaction
-from stock import Stock
+from .position import Position
+from .transaction import Transaction
+from .stock import Stock
+from .base import Base
 
-class Account:
+class Account(Base):
     def __init__(self, account_id):
         self.account_id = account_id
         self.balance = 0
@@ -70,16 +71,3 @@ class Account:
             print('no positions to display')
         print('total investable cash: {}'.format(self.balance))
 
-
-if __name__ == '__main__':
-    my_acct = Account(1)
-    my_acct.fund_account(10000)
-    my_acct.enter_position('AAPL', 10)
-    my_acct.enter_position('W', 20)
-    my_acct.enter_position('W', 30)
-    my_acct.view_portfolio()
-    my_acct.fund_account(5000)
-    my_acct.check_portfolio('W')
-
-    tra = Position('F', 221, 3)
-    tra.generate_id()

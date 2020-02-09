@@ -2,7 +2,9 @@ import time
 import random
 from datetime import date
 
-class Position:
+from .base import Base
+
+class Position(Base):
     def __init__(self, ticker, quantity):
         self.ticker = ticker
         self.quantity = quantity
@@ -16,7 +18,4 @@ class Position:
     def update_position(self, transaction_quantity, transaction_id):
         self.quantity += transaction_quantity
         self.component_transactions.append(transaction_id)
-
-    def get_position_details(self):
-        print(self.__dict__)
 

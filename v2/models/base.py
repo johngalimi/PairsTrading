@@ -1,3 +1,5 @@
+import inspect
+
 class Base:
     def get_details(self):
         print(self.__dict__)

@@ -2,7 +2,9 @@ import time
 import random
 from datetime import date
 
-class Transaction:
+from .base import Base
+
+class Transaction(Base):
     def __init__(self, action, ticker, price, quantity):
         self.action = action
         self.ticker = ticker
