@@ -26,9 +26,7 @@ class Account:
             # verify that stock exists in portfolio
             self.update_balance(transaction_value)
             
-
-        self.update_balance(transaction_value)
-        
+        self.update_balance(transaction_value) 
 
     def enter_position(self, ticker, quantity):
 
@@ -67,7 +65,7 @@ class Account:
         if len(self.positions) > 0:
             print('---Portfolio Details---')
             for ticker, position in self.positions.items():
-                position.get_position_details()
+                position.get_details()
         else:
             print('no positions to display')
         print('total investable cash: {}'.format(self.balance))
@@ -82,3 +80,6 @@ if __name__ == '__main__':
     my_acct.view_portfolio()
     my_acct.fund_account(5000)
     my_acct.check_portfolio('W')
+
+    tra = Position('F', 221, 3)
+    tra.generate_id()
