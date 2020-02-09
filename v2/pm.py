@@ -1,6 +1,6 @@
 #!/usr/bin/python3
 
-from models.account import Account
+from infra.account import Account
 
 if __name__ == '__main__':
     
