@@ -1,22 +1,44 @@
 from position import Position
+from transaction import Transaction
 from stock import Stock
 
 class Account:
-    def __init__(self):
+    def __init__(self, account_id):
+        self.account_id = account_id
         self.balance = 0
         self.positions = {}
     
     def update_balance(self, amount):
         self.balance += amount
 
+    def execute_transaction(self, action, ticker, quantity):
+        new_stock = Stock(ticker)
+        current_price = new_stock.get_current_price()
+        transaction_value = current_price * quantity
+
+        new_transaction = Transaction(action, ticker, current_price, quantity)
+
+        if action == 'BUY':
+            if self.balance >= transaction_value:
+                self.update_balance(-transaction_value)
+
+        elif action == 'SELL':
+            # verify that stock exists in portfolio
+            self.update_balance(transaction_value)
+            
+
+        self.update_balance(transaction_value)
+        
+
     def enter_position(self, ticker, quantity):
 
         new_stock = Stock(ticker)
         current_price = new_stock.get_current_price()
+        transaction_value = current_price * quantity
 
-        if self.balance >= (current_price * quantity):
+        if self.balance >= transaction_value:
             new_position = Position(ticker, current_price, quantity)
-            self.update_balance(-(current_price * quantity))
+            self.update_balance(-transaction_value)
 
             if self.check_portfolio(ticker):
                 self.positions[ticker].quantity += quantity
@@ -39,7 +61,7 @@ class Account:
 
     def fund_account(self, amount):
         self.update_balance(amount)
-        print('funds updated, new account balance: {}'.format(self.balance))
+        print('added {} to account, new balance: {}'.format(amount, self.balance))
 
     def view_portfolio(self):
         if len(self.positions) > 0:
@@ -52,7 +74,7 @@ class Account:
 
 
 if __name__ == '__main__':
-    my_acct = Account()
+    my_acct = Account(1)
     my_acct.fund_account(10000)
     my_acct.enter_position('AAPL', 10)
     my_acct.enter_position('W', 20)
