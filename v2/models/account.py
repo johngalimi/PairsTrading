@@ -2,6 +2,7 @@ from .position import Position
 from .transaction import Transaction
 from .stock import Stock
 from .base import Base
+from .position2 import Position2
 
 class Account(Base):
     def __init__(self, account_id):
@@ -22,10 +23,24 @@ class Account(Base):
         if action == 'BUY':
             if self.balance >= transaction_value:
                 self.update_balance(-transaction_value)
+                if self.check_portfolio(ticker):
+                    self.positions[ticker].update_position(quantity, new_transaction.transaction_id)
+                else:
+                    new_position = Position2(ticker, current_price, quantity)
+                    self.positions[ticker] = new_position
+            else:
+                print("insufficient funds to complete transaction")
 
         elif action == 'SELL':
             # verify that stock exists in portfolio
-            self.update_balance(transaction_value)
+            if self.check_portfolio(ticker):
+                if new_transaction.quantity <= self.positions[ticker].quantity:
+                    self.update_balance(transaction_value)
+                    self.positions[ticker].update_position(-quantity, new_transaction.transaction_id)
+                else:
+                    print('trying to sell more shares than you own')
+            else:
+                print('trying to sell stock you do not own')
             
         self.update_balance(transaction_value) 
 

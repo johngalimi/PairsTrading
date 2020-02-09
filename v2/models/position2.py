@@ -4,7 +4,7 @@ from datetime import date
 
 from .base import Base
 
-class Position(Base):
+class Position22(Base):
     def __init__(self, ticker, quantity):
         self.ticker = ticker
         self.quantity = quantity
@@ -18,4 +18,5 @@ class Position(Base):
     def update_position(self, transaction_quantity, transaction_id):
         self.quantity += transaction_quantity
         self.component_transactions.append(transaction_id)
+        # add logic for closing out a position to 0 shares
 
