@@ -1,5 +1,7 @@
 #!/bin/bash
 
-echo enter password
-read -s password
-echo your pwd is:, $password
+echo welcome to fast_git
+git status
+git add .
+git commit -m "commit w fast_git"
+git push
