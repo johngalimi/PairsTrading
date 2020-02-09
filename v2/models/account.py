@@ -26,7 +26,7 @@ class Account(Base):
                 if self.check_portfolio(ticker):
                     self.positions[ticker].update_position(quantity, new_transaction.transaction_id)
                 else:
-                    new_position = Position2(ticker, quantity)
+                    new_position = Position2(ticker, quantity, new_transaction.transaction_id)
                     self.positions[ticker] = new_position
             else:
                 print("insufficient funds to complete transaction")
@@ -42,7 +42,8 @@ class Account(Base):
             else:
                 print('trying to sell stock you do not own')
             
-        #self.update_balance(transaction_value) 
+        print('---> transaction executed:')
+        new_transaction.get_details()
 
     def enter_position(self, ticker, quantity):
 

@@ -5,11 +5,12 @@ from datetime import date
 from .base import Base
 
 class Position2(Base):
-    def __init__(self, ticker, quantity):
+    def __init__(self, ticker, quantity, initial_transaction):
         self.ticker = ticker
         self.quantity = quantity
+        self.initial_transaction = initial_transaction
         self.position_id = self.set_position_id()
-        self.component_transactions = []
+        self.component_transactions = [self.initial_transaction]
         # need to add initial transaction id when we open a position
     
     def set_position_id(self):
