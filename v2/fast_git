@@ -5,5 +5,5 @@ now=$(date)
 message="fast_git commit: $now"
 git status
 git add .
-git commit -m "fast_git commit:"
+git commit -m "$message"
 git push
