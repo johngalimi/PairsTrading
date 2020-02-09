@@ -1,7 +1,6 @@
 #!/usr/bin/python3
 
 from models.account import Account
-from models.order import Order
 
 if __name__ == '__main__':
     
@@ -19,12 +18,8 @@ if __name__ == '__main__':
     target_buys = {'W':85, 'AAPL': 126}
     target_sells = {'W': 17, 'AAPL': 29}
 
-    order = Order(target_buys, target_sells)
-    consolidated_orders = order.generate_order()
-    
-    for order_type in consolidated_orders:
-        for ticker, quantity in consolidated_orders[order_type]:
-            acct2.execute_transaction(order_type, ticker, quantity)
-
-
+    for ticker, quantity in target_buys.items():
+        acct2.execute_transaction('BUY', ticker, quantity)
+    for ticker, quantity in target_sells.items():
+        acct2.execute_transaction('SELL', ticker, quantity)
 
