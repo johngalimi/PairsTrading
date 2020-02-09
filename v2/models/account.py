@@ -42,7 +42,7 @@ class Account(Base):
             else:
                 print('trying to sell stock you do not own')
             
-        self.update_balance(transaction_value) 
+        #self.update_balance(transaction_value) 
 
     def enter_position(self, ticker, quantity):
 

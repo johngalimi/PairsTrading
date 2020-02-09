@@ -10,6 +10,7 @@ class Position2(Base):
         self.quantity = quantity
         self.position_id = self.set_position_id()
         self.component_transactions = []
+        # need to add initial transaction id when we open a position
     
     def set_position_id(self):
         unique_id = "{}{}{}".format(self.ticker, str(round(time.time())), str(random.randint(10, 99)))
