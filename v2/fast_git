@@ -1,6 +1,8 @@
 #!/bin/bash
 
 echo welcome to fast_git
+now=$(date)
+message="fast_git commit: $now"
 git status
 git add .
 git commit -m "fast_git commit:"
