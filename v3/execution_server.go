@@ -6,6 +6,7 @@ import (
 	"log"
 	"net/http"
 	"time"
+
 	"github.com/gorilla/mux"
 )
 
@@ -43,10 +44,16 @@ func handleRequests() {
 func main() {
 	Positions = []Position{
 		Position{
-			Ticker: "AAPL", PurchasePrice: 200.50, PurchaseQuantity: 5, PurchaseDate: time.Now()
+			Ticker:           "AAPL",
+			PurchasePrice:    200.50,
+			PurchaseQuantity: 5,
+			PurchaseDate:     time.Now(),
 		},
 		Position{
-			Ticker: "F", PurchasePrice: 41.75, PurchaseQuantity: 3, PurchaseDate: time.Now().Add(time.Duration(100))
+			Ticker:           "F",
+			PurchasePrice:    41.75,
+			PurchaseQuantity: 3,
+			PurchaseDate:     time.Now().Add(time.Duration(100)),
 		},
 	}
 
