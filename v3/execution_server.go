@@ -26,7 +26,7 @@ func getTransactions(w http.ResponseWriter, r *http.Request) {
 }
 
 func executeTransaction(w http.ResponseWriter, r *http.Request) {
-	// curl -X POST -H 'Content-Type: application/json' -d "{\"ticker\":\"FB\", \"price\":182.76, \"quantity\":15}" localhost:8090/position
+	// curl -X POST -H 'Content-Type: application/json' -d "{\"ticker\":\"FB\", \"price\":182.76, \"quantity\":15}" localhost:8090/transaction
 	var transaction Transaction
 
 	json.NewDecoder(r.Body).Decode(&transaction)
@@ -34,14 +34,6 @@ func executeTransaction(w http.ResponseWriter, r *http.Request) {
 	Transactions = append(Transactions, transaction)
 
 	json.NewEncoder(w).Encode(transaction)
-
-	cleanPortfolio()
-}
-
-func cleanPortfolio() {
-	for _, transaction := range Transactions {
-		fmt.Println(transaction.Ticker)
-	}
 }
 
 func liveness(w http.ResponseWriter, req *http.Request) {
