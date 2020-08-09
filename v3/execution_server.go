@@ -45,7 +45,7 @@ func executeTransaction(w http.ResponseWriter, r *http.Request) {
 	json.NewEncoder(w).Encode(transaction)
 }
 
-func getPositions(w http.ResponseWriter, r *http.Request) {
+func constructPortfolio() map[string]int {
 	// method to construct portfolio by aggregating across transactions
 
 	portfolio := make(map[string]int)
@@ -54,7 +54,15 @@ func getPositions(w http.ResponseWriter, r *http.Request) {
 		portfolio[transaction.Ticker] += transaction.Quantity
 	}
 
+	return portfolio
+}
+
+func getPositions(w http.ResponseWriter, r *http.Request) {
+	// method to construct portfolio and serve it up
+
 	var Positions []Position
+
+	portfolio := constructPortfolio()
 
 	for ticker, quantity := range portfolio {
 		Positions = append(Positions, Position{Ticker: ticker, Quantity: quantity})
