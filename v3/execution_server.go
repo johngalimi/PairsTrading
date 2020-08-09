@@ -34,6 +34,14 @@ func enterPosition(w http.ResponseWriter, r *http.Request) {
 	Positions = append(Positions, position)
 
 	json.NewEncoder(w).Encode(position)
+
+	cleanPortfolio()
+}
+
+func cleanPortfolio() {
+	for _, position := range Positions {
+		fmt.Println(position.Ticker)
+	}
 }
 
 func liveness(w http.ResponseWriter, req *http.Request) {
@@ -42,7 +50,9 @@ func liveness(w http.ResponseWriter, req *http.Request) {
 
 func handleRequests() {
 
-	fmt.Println("Server Started: ", time.Now(), "|| Listening on :8090", "|| Execution Server: Ready")
+	var port string = ":8090"
+
+	fmt.Println("Server Started: ", time.Now(), "|| Listening on", port, "|| Execution Server: Ready")
 
 	myRouter := mux.NewRouter().StrictSlash(true)
 
@@ -50,7 +60,7 @@ func handleRequests() {
 	myRouter.HandleFunc("/positions", getPositions).Methods("GET")
 	myRouter.HandleFunc("/position", enterPosition).Methods("POST")
 
-	log.Fatal(http.ListenAndServe(":8090", myRouter))
+	log.Fatal(http.ListenAndServe(port, myRouter))
 }
 
 func main() {
