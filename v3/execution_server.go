@@ -111,7 +111,7 @@ func main() {
 			Ticker:   "F",
 			Price:    41.75,
 			Quantity: -2,
-			Date:     time.Now().Add(time.Duration(100)),
+			Date:     time.Now().Add(time.Duration(200)),
 		},
 	}
 
