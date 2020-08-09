@@ -10,37 +10,37 @@ import (
 	"github.com/gorilla/mux"
 )
 
-// Position - Representation of Single Stock
-type Position struct {
-	Ticker           string    `json:"ticker"`
-	PurchasePrice    float32   `json:"purchase_price"`
-	PurchaseQuantity int64     `json:"purchase_quantity"`
-	PurchaseDate     time.Time `json:"purchase_date"`
+// Transaction - Representation of Single Buy/Sell
+type Transaction struct {
+	Ticker   string    `json:"ticker"`
+	Price    float32   `json:"price"`
+	Quantity int64     `json:"quantity"`
+	Date     time.Time `json:"date"`
 }
 
-// Positions - Representation of Collection of Stocks (Portfolio)
-var Positions []Position
+// Transactions - Representation of Collection of Transactions (Portfolio)
+var Transactions []Transaction
 
-func getPositions(w http.ResponseWriter, r *http.Request) {
-	json.NewEncoder(w).Encode(Positions)
+func getTransactions(w http.ResponseWriter, r *http.Request) {
+	json.NewEncoder(w).Encode(Transactions)
 }
 
-func enterPosition(w http.ResponseWriter, r *http.Request) {
-	// curl -X POST -H 'Content-Type: application/json' -d "{\"ticker\":\"FB\", \"purchase_price\":182.76, \"purchase_quantity\":15}" localhost:8090/position
-	var position Position
+func executeTransaction(w http.ResponseWriter, r *http.Request) {
+	// curl -X POST -H 'Content-Type: application/json' -d "{\"ticker\":\"FB\", \"price\":182.76, \"quantity\":15}" localhost:8090/position
+	var transaction Transaction
 
-	json.NewDecoder(r.Body).Decode(&position)
+	json.NewDecoder(r.Body).Decode(&transaction)
 
-	Positions = append(Positions, position)
+	Transactions = append(Transactions, transaction)
 
-	json.NewEncoder(w).Encode(position)
+	json.NewEncoder(w).Encode(transaction)
 
 	cleanPortfolio()
 }
 
 func cleanPortfolio() {
-	for _, position := range Positions {
-		fmt.Println(position.Ticker)
+	for _, transaction := range Transactions {
+		fmt.Println(transaction.Ticker)
 	}
 }
 
@@ -57,25 +57,25 @@ func handleRequests() {
 	myRouter := mux.NewRouter().StrictSlash(true)
 
 	myRouter.HandleFunc("/", liveness).Methods("GET")
-	myRouter.HandleFunc("/positions", getPositions).Methods("GET")
-	myRouter.HandleFunc("/position", enterPosition).Methods("POST")
+	myRouter.HandleFunc("/transactions", getTransactions).Methods("GET")
+	myRouter.HandleFunc("/transaction", executeTransaction).Methods("POST")
 
 	log.Fatal(http.ListenAndServe(port, myRouter))
 }
 
 func main() {
-	Positions = []Position{
-		Position{
-			Ticker:           "AAPL",
-			PurchasePrice:    200.50,
-			PurchaseQuantity: 5,
-			PurchaseDate:     time.Now(),
+	Transactions = []Transaction{
+		Transaction{
+			Ticker:   "AAPL",
+			Price:    200.50,
+			Quantity: 5,
+			Date:     time.Now(),
 		},
-		Position{
-			Ticker:           "F",
-			PurchasePrice:    41.75,
-			PurchaseQuantity: 3,
-			PurchaseDate:     time.Now().Add(time.Duration(100)),
+		Transaction{
+			Ticker:   "F",
+			Price:    41.75,
+			Quantity: 3,
+			Date:     time.Now().Add(time.Duration(100)),
 		},
 	}
 
