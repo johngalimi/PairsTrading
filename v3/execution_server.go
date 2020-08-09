@@ -14,7 +14,7 @@ import (
 type Position struct {
 	Ticker           string    `json:"ticker"`
 	PurchasePrice    float32   `json:"purchase_price"`
-	PurchaseQuantity int64     `json:"purchase_Quantity"`
+	PurchaseQuantity int64     `json:"purchase_quantity"`
 	PurchaseDate     time.Time `json:"purchase_date"`
 }
 
@@ -23,6 +23,17 @@ var Positions []Position
 
 func getPositions(w http.ResponseWriter, r *http.Request) {
 	json.NewEncoder(w).Encode(Positions)
+}
+
+func enterPosition(w http.ResponseWriter, r *http.Request) {
+	// curl -X POST -H 'Content-Type: application/json' -d "{\"ticker\":\"FB\", \"purchase_price\":182.76, \"purchase_quantity\":15}" localhost:8090/position
+	var position Position
+
+	json.NewDecoder(r.Body).Decode(&position)
+
+	Positions = append(Positions, position)
+
+	json.NewEncoder(w).Encode(position)
 }
 
 func liveness(w http.ResponseWriter, req *http.Request) {
@@ -37,6 +48,7 @@ func handleRequests() {
 
 	myRouter.HandleFunc("/", liveness).Methods("GET")
 	myRouter.HandleFunc("/positions", getPositions).Methods("GET")
+	myRouter.HandleFunc("/position", enterPosition).Methods("POST")
 
 	log.Fatal(http.ListenAndServe(":8090", myRouter))
 }
