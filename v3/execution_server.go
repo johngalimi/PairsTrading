@@ -2,11 +2,12 @@ package main
 
 import (
 	"fmt"
+	"log"
 	"net/http"
 )
 
-func hello(w http.ResponseWriter, req *http.Request) {
-	fmt.Fprintf(w, "hello\n")
+func liveness(w http.ResponseWriter, req *http.Request) {
+	fmt.Fprintf(w, "Execution Server: live\n")
 }
 
 func headers(w http.ResponseWriter, req *http.Request) {
@@ -18,10 +19,13 @@ func headers(w http.ResponseWriter, req *http.Request) {
 	}
 }
 
-func main() {
-	
-	http.HandleFunc("/hello", hello)
+func handleRequests() {
+	http.HandleFunc("/liveness", liveness)
 	http.HandleFunc("/headers", headers)
 
-	http.ListenAndServe(":8090", nil)
+	log.Fatal(http.ListenAndServe(":8090", nil))
+}
+
+func main() {
+	handleRequests()
 }
