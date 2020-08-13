@@ -1,14 +1,14 @@
 import yfinance as yf
 import pandas as pd
-import identifier_constants as constants
 from statsmodels.tsa.stattools import coint, adfuller
+import src.py.constants.identifier_constants as constants
 
 
 class TradeIdentifier:
-    def __init__(self, frequency, start_date, end_date):
-        self.frequency = frequency
+    def __init__(self, start_date, end_date):
         self.start_date = start_date
         self.end_date = end_date
+        self.frequency = constants.FREQUENCY_DAILY
 
     def _retrieve_historical_data(self, ticker):
         ticker_data = yf.Ticker(ticker)

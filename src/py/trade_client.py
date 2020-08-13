@@ -1,8 +1,16 @@
 import requests
-import client_constants as constants
+import src.py.constants.client_constants as constants
 
 
 class TradeClient:
+    def probe_server(self):
+        try:
+            requests.get(url=self._construct_url(constants.INDEX_ENDPOINT))
+        except requests.exceptions.ConnectionError:
+            return False
+
+        return True
+
     def _construct_url(self, endpoint):
         return f"{constants.HOSTNAME_ROOT}{endpoint}"
 
