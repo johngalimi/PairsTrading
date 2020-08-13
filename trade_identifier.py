@@ -21,14 +21,14 @@ class TradeIdentifier:
         pricing_df = pricing_df.rename(columns={constants.COLUMN_CLOSE: ticker})
         return pricing_df[[constants.COLUMN_DATE, ticker]]
 
-    def get_historical_pricing_df(self, ticker):
+    def _get_historical_pricing_df(self, ticker):
         ticker_df = self._retrieve_historical_data(ticker)
         return self._process_historical_data(ticker, ticker_df)
 
     def construct_pair_pricing_df(self, ticker_a, ticker_b):
         return pd.merge(
-            self.get_historical_pricing_df(ticker=ticker_a),
-            self.get_historical_pricing_df(ticker=ticker_b),
+            self._get_historical_pricing_df(ticker=ticker_a),
+            self._get_historical_pricing_df(ticker=ticker_b),
             on=constants.COLUMN_DATE,
         )
 
@@ -38,7 +38,7 @@ class TradeIdentifier:
     def _compare_against_tolerance(self, p_value, tolerance):
         return p_value <= tolerance
 
-    def test_cointegration(self, ticker_a, ticker_b, df):
+    def _test_cointegration(self, ticker_a, ticker_b, df):
         result = coint(df[ticker_a], df[ticker_b])
 
         return self._compare_against_tolerance(
@@ -46,7 +46,7 @@ class TradeIdentifier:
             tolerance=constants.COINTEGRATION_THRESHOLD,
         )
 
-    def test_stationarity(self, ticker_a, ticker_b, df):
+    def _test_stationarity(self, ticker_a, ticker_b, df):
         df[constants.COLUMN_SPREAD] = df[ticker_a] / df[ticker_b]
         result = adfuller(df[constants.COLUMN_SPREAD])
 
@@ -56,11 +56,11 @@ class TradeIdentifier:
         )
 
     def test_relationship(self, ticker_a, ticker_b, pricing_df):
-        is_cointegrated = self.test_cointegration(
+        is_cointegrated = self._test_cointegration(
             ticker_a=STOCK_A, ticker_b=STOCK_B, df=pricing_df
         )
 
-        is_stationary = self.test_stationarity(
+        is_stationary = self._test_stationarity(
             ticker_a=STOCK_A, ticker_b=STOCK_B, df=pricing_df
         )
 
@@ -84,4 +84,5 @@ if __name__ == "__main__":
         ticker_a=STOCK_A, ticker_b=STOCK_B, pricing_df=df
     )
 
+    print(df.head())
     print(result)
