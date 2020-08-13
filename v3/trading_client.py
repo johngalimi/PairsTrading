@@ -7,18 +7,22 @@ TRANSACTIONS_ENDPOINT = "/transactions"
 POSITIONS_ENDPOINT = "/positions"
 TRANSACTION_ENDPOINT = "/transaction"
 
+FIELD_TICKER = "ticker"
+FIELD_PRICE = "price"
+FIELD_QUANTITY = "quantity"
+
 
 class TradingClient:
     def _construct_url(self, endpoint):
         return f"{HOSTNAME_ROOT}{endpoint}"
 
     def _get_helper(self, endpoint):
-        response = requests.get(self._construct_url(endpoint))
+        response = requests.get(url=self._construct_url(endpoint))
         return response.json()
 
     def _post_helper(self, endpoint, data):
         response = requests.post(
-            self._construct_url(endpoint), headers=POST_HEADERS, json=data
+            url=self._construct_url(endpoint), headers=POST_HEADERS, json=data
         )
         return response.json()
 
@@ -29,7 +33,11 @@ class TradingClient:
         return self._get_helper(endpoint=POSITIONS_ENDPOINT)
 
     def execute_transaction(self, ticker, price, quantity):
-        transaction_object = {"ticker": ticker, "price": price, "quantity": quantity}
+        transaction_object = {
+            FIELD_TICKER: ticker,
+            FIELD_PRICE: price,
+            FIELD_QUANTITY: quantity,
+        }
         return self._post_helper(endpoint=TRANSACTION_ENDPOINT, data=transaction_object)
 
 
