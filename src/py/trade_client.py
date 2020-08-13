@@ -39,34 +39,3 @@ class TradeClient:
         return self._post_helper(
             endpoint=constants.TRANSACTION_ENDPOINT, data=transaction_object
         )
-
-
-if __name__ == "__main__":
-    trader = TradeClient()
-
-    transactions = trader.get_transactions()
-    print("Transactions:", transactions)
-
-    print("\n")
-
-    positions = trader.get_positions()
-    print("Positions:", positions)
-
-    print("\n")
-
-    transaction = trader.execute_transaction(ticker="FB", price=182.76, quantity=12)
-    transaction = trader.execute_transaction(ticker="FB", price=190.1, quantity=-8)
-    transaction = trader.execute_transaction(ticker="F", price=50, quantity=8)
-    transaction = trader.execute_transaction(ticker="AAPL", price=221.23, quantity=-3)
-
-    print("\n")
-
-    transactions = trader.get_transactions()
-    print("Transactions:", transactions)
-
-    print("\n")
-
-    positions = trader.get_positions()
-    print("Positions:", positions)
-
-    print("\n")
