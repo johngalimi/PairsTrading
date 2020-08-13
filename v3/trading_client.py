@@ -1,20 +1,10 @@
 import requests
-
-HOSTNAME_ROOT = "http://localhost:8090"
-POST_HEADERS = {"Content-type": "application/json"}
-
-TRANSACTIONS_ENDPOINT = "/transactions"
-POSITIONS_ENDPOINT = "/positions"
-TRANSACTION_ENDPOINT = "/transaction"
-
-FIELD_TICKER = "ticker"
-FIELD_PRICE = "price"
-FIELD_QUANTITY = "quantity"
+import constants as const
 
 
 class TradingClient:
     def _construct_url(self, endpoint):
-        return f"{HOSTNAME_ROOT}{endpoint}"
+        return f"{const.HOSTNAME_ROOT}{endpoint}"
 
     def _get_helper(self, endpoint):
         response = requests.get(url=self._construct_url(endpoint))
@@ -22,23 +12,25 @@ class TradingClient:
 
     def _post_helper(self, endpoint, data):
         response = requests.post(
-            url=self._construct_url(endpoint), headers=POST_HEADERS, json=data
+            url=self._construct_url(endpoint), headers=const.POST_HEADERS, json=data
         )
         return response.json()
 
     def get_transactions(self):
-        return self._get_helper(endpoint=TRANSACTIONS_ENDPOINT)
+        return self._get_helper(endpoint=const.TRANSACTIONS_ENDPOINT)
 
     def get_positions(self):
-        return self._get_helper(endpoint=POSITIONS_ENDPOINT)
+        return self._get_helper(endpoint=const.POSITIONS_ENDPOINT)
 
     def execute_transaction(self, ticker, price, quantity):
         transaction_object = {
-            FIELD_TICKER: ticker,
-            FIELD_PRICE: price,
-            FIELD_QUANTITY: quantity,
+            const.FIELD_TICKER: ticker,
+            const.FIELD_PRICE: price,
+            const.FIELD_QUANTITY: quantity,
         }
-        return self._post_helper(endpoint=TRANSACTION_ENDPOINT, data=transaction_object)
+        return self._post_helper(
+            endpoint=const.TRANSACTION_ENDPOINT, data=transaction_object
+        )
 
 
 if __name__ == "__main__":
