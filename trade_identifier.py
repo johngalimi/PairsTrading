@@ -38,24 +38,33 @@ class TradeIdentifier:
     def _compare_against_tolerance(self, p_value, tolerance):
         return p_value <= tolerance
 
-    def test_cointegration(self, ticker_a, ticker_b, pricing_df):
-        result = coint(pricing_df[ticker_a], pricing_df[ticker_b])
+    def test_cointegration(self, ticker_a, ticker_b, df):
+        result = coint(df[ticker_a], df[ticker_b])
 
         return self._compare_against_tolerance(
             p_value=self._harvest_p_value(result),
             tolerance=constants.COINTEGRATION_THRESHOLD,
         )
 
-    def test_stationarity(self, ticker_a, ticker_b, pricing_df):
-        pricing_df[constants.COLUMN_SPREAD] = (
-            pricing_df[ticker_a] / pricing_df[ticker_b]
-        )
-        result = adfuller(pricing_df[constants.COLUMN_SPREAD])
+    def test_stationarity(self, ticker_a, ticker_b, df):
+        df[constants.COLUMN_SPREAD] = df[ticker_a] / df[ticker_b]
+        result = adfuller(df[constants.COLUMN_SPREAD])
 
         return self._compare_against_tolerance(
             p_value=self._harvest_p_value(result),
             tolerance=constants.ADFULLER_TOLERANCE,
         )
+
+    def test_relationship(self, ticker_a, ticker_b, pricing_df):
+        is_cointegrated = self.test_cointegration(
+            ticker_a=STOCK_A, ticker_b=STOCK_B, df=pricing_df
+        )
+
+        is_stationary = self.test_stationarity(
+            ticker_a=STOCK_A, ticker_b=STOCK_B, df=pricing_df
+        )
+
+        return is_cointegrated and is_stationary
 
 
 if __name__ == "__main__":
@@ -71,10 +80,8 @@ if __name__ == "__main__":
 
     df = identifier.construct_pair_pricing_df(ticker_a=STOCK_A, ticker_b=STOCK_B)
 
-    coint_test = identifier.test_cointegration(
+    result = identifier.test_relationship(
         ticker_a=STOCK_A, ticker_b=STOCK_B, pricing_df=df
     )
 
-    stationarity_test = identifier.test_stationarity(
-        ticker_a=STOCK_A, ticker_b=STOCK_B, pricing_df=df
-    )
+    print(result)
