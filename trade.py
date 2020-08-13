@@ -1,5 +1,5 @@
-from src.py.trade_client import TradeClient
-from src.py.trade_identifier import TradeIdentifier
+from src.client.trade_client import TradeClient
+from src.client.trade_identifier import TradeIdentifier
 
 if __name__ == "__main__":
     trader = TradeClient()

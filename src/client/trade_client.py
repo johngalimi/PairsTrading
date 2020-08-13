@@ -1,5 +1,5 @@
 import requests
-import src.py.constants.client_constants as constants
+import src.client.constants.client_constants as constants
 
 
 class TradeClient:
