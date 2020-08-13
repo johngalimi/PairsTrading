@@ -1,5 +1,6 @@
 from src.client.trade_client import TradeClient
 from src.client.trade_identifier import TradeIdentifier
+from src.client.trade_processor import TradeProcessor
 
 if __name__ == "__main__":
     trader = TradeClient()
@@ -9,7 +10,9 @@ if __name__ == "__main__":
         transaction = trader.execute_transaction(ticker="FB", price=182.76, quantity=12)
         transaction = trader.execute_transaction(ticker="FB", price=190.1, quantity=-8)
         transaction = trader.execute_transaction(ticker="F", price=50, quantity=8)
-        transaction = trader.execute_transaction(ticker="AAPL", price=221.23, quantity=-3)
+        transaction = trader.execute_transaction(
+            ticker="AAPL", price=221.23, quantity=-3
+        )
 
         transactions = trader.get_transactions()
         print("Transactions:", transactions)
@@ -36,4 +39,12 @@ if __name__ == "__main__":
     )
 
     if is_valid_pair:
-        print(df.head())
+
+        MOVING_AVG_SHORT = 10
+        MOVING_AVG_LONG = 30
+
+        processor = TradeProcessor()
+        df = processor.calculate_statistics(
+            pricing_df=df, window_short=MOVING_AVG_SHORT, window_long=MOVING_AVG_LONG
+        )
+        print(df)
