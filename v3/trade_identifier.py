@@ -9,24 +9,27 @@ class TradeIdentifier:
         self.start_date = start_date
         self.end_date = end_date
 
-    def get_historical_pricing_df(self, ticker):
+    def _retrieve_historical_data(self, ticker):
         ticker_data = yf.Ticker(ticker)
-        ticker_df = ticker_data.history(
+        return ticker_data.history(
             period=self.frequency, start=self.start_date, end=self.end_date
         )
 
-        ticker_df.reset_index(inplace=True)
-        ticker_df.rename(columns={constants.COLUMN_CLOSE: ticker}, inplace=True)
+    def _process_historical_data(self, ticker, pricing_df):
+        pricing_df = pricing_df.reset_index()
+        pricing_df = pricing_df.rename(columns={constants.COLUMN_CLOSE: ticker})
+        return pricing_df[[constants.COLUMN_DATE, ticker]]
 
-        return ticker_df[[constants.COLUMN_DATE, ticker]]
+    def get_historical_pricing_df(self, ticker):
+        ticker_df = self._retrieve_historical_data(ticker)
+        return self._process_historical_data(ticker, ticker_df)
 
     def construct_pair_pricing_df(self, ticker_a, ticker_b):
-
-        stock_a = self.get_historical_pricing_df(ticker=ticker_a)
-        stock_b = self.get_historical_pricing_df(ticker=ticker_b)
-
-        pair_df = pd.merge(stock_a, stock_b, on=constants.COLUMN_DATE)
-        return pair_df
+        return pd.merge(
+            self.get_historical_pricing_df(ticker=ticker_a),
+            self.get_historical_pricing_df(ticker=ticker_b),
+            on=constants.COLUMN_DATE,
+        )
 
 
 if __name__ == "__main__":
