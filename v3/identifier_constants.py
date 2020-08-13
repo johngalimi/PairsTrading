@@ -1,0 +1,4 @@
+FREQUENCY_DAILY = "1d"
+
+COLUMN_CLOSE = "Close"
+COLUMN_DATE = "Date"
