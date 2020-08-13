@@ -1,4 +1,3 @@
-import src.py.constants.identifier_constants as constants
 from src.py.trade_client import TradeClient
 from src.py.trade_identifier import TradeIdentifier
 
