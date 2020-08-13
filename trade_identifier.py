@@ -1,6 +1,7 @@
 import yfinance as yf
 import pandas as pd
 import identifier_constants as constants
+from statsmodels.tsa.stattools import coint, adfuller
 
 
 class TradeIdentifier:
@@ -31,13 +32,49 @@ class TradeIdentifier:
             on=constants.COLUMN_DATE,
         )
 
+    def _harvest_p_value(self, statsmodels_result):
+        return statsmodels_result[1]
+
+    def _compare_against_tolerance(self, p_value, tolerance):
+        return p_value <= tolerance
+
+    def test_cointegration(self, ticker_a, ticker_b, pricing_df):
+        result = coint(pricing_df[ticker_a], pricing_df[ticker_b])
+
+        return self._compare_against_tolerance(
+            p_value=self._harvest_p_value(result),
+            tolerance=constants.COINTEGRATION_THRESHOLD,
+        )
+
+    def test_stationarity(self, ticker_a, ticker_b, pricing_df):
+        pricing_df[constants.COLUMN_SPREAD] = (
+            pricing_df[ticker_a] / pricing_df[ticker_b]
+        )
+        result = adfuller(pricing_df[constants.COLUMN_SPREAD])
+
+        return self._compare_against_tolerance(
+            p_value=self._harvest_p_value(result),
+            tolerance=constants.ADFULLER_TOLERANCE,
+        )
+
 
 if __name__ == "__main__":
+    STOCK_A = "ALXN"
+    STOCK_B = "MCK"
+
+    START = "2015-01-01"
+    END = "2020-01-25"
+
     identifier = TradeIdentifier(
-        frequency=constants.FREQUENCY_DAILY,
-        start_date="2020-01-01",
-        end_date="2020-01-25",
+        frequency=constants.FREQUENCY_DAILY, start_date=START, end_date=END,
     )
 
-    df = identifier.construct_pair_pricing_df(ticker_a="MSFT", ticker_b="FB")
-    print(df)
+    df = identifier.construct_pair_pricing_df(ticker_a=STOCK_A, ticker_b=STOCK_B)
+
+    coint_test = identifier.test_cointegration(
+        ticker_a=STOCK_A, ticker_b=STOCK_B, pricing_df=df
+    )
+
+    stationarity_test = identifier.test_stationarity(
+        ticker_a=STOCK_A, ticker_b=STOCK_B, pricing_df=df
+    )
