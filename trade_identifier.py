@@ -56,33 +56,7 @@ class TradeIdentifier:
         )
 
     def test_relationship(self, ticker_a, ticker_b, pricing_df):
-        is_cointegrated = self._test_cointegration(
-            ticker_a=STOCK_A, ticker_b=STOCK_B, df=pricing_df
-        )
-
-        is_stationary = self._test_stationarity(
-            ticker_a=STOCK_A, ticker_b=STOCK_B, df=pricing_df
-        )
+        is_cointegrated = self._test_cointegration(ticker_a, ticker_b, pricing_df)
+        is_stationary = self._test_stationarity(ticker_a, ticker_b, pricing_df)
 
         return is_cointegrated and is_stationary
-
-
-if __name__ == "__main__":
-    STOCK_A = "ALXN"
-    STOCK_B = "MCK"
-
-    START = "2015-01-01"
-    END = "2020-01-25"
-
-    identifier = TradeIdentifier(
-        frequency=constants.FREQUENCY_DAILY, start_date=START, end_date=END,
-    )
-
-    df = identifier.construct_pair_pricing_df(ticker_a=STOCK_A, ticker_b=STOCK_B)
-
-    result = identifier.test_relationship(
-        ticker_a=STOCK_A, ticker_b=STOCK_B, pricing_df=df
-    )
-
-    print(df.head())
-    print(result)
