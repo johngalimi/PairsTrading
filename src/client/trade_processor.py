@@ -39,7 +39,14 @@ class TradeProcessor:
 
         return pricing_df
 
-    def plot_relationship(self, pricing_df):
+    def _add_horizontal_line(self, axis, y_value):
+        axis.axhline(
+            y=y_value,
+            color=constants.HORIZONTAL_LINE_COLOR,
+            ls=constants.HORIZONTAL_LINE_STYLE,
+        )
+
+    def visualize_relationship(self, pricing_df):
 
         current_axis = plt.gca()
 
@@ -57,20 +64,12 @@ class TradeProcessor:
             ax=current_axis,
         )
 
-        current_axis.axhline(
-            y=self.anchor_zscore - self.z_threshold,
-            color=constants.HORIZONTAL_LINE_COLOR,
-            ls=constants.HORIZONTAL_LINE_STYLE,
+        self._add_horizontal_line(
+            axis=current_axis, y_value=self.anchor_zscore - self.z_threshold
         )
-        current_axis.axhline(
-            y=self.anchor_zscore,
-            color=constants.HORIZONTAL_LINE_COLOR,
-            ls=constants.HORIZONTAL_LINE_STYLE,
-        )
-        current_axis.axhline(
-            y=self.anchor_zscore + self.z_threshold,
-            color=constants.HORIZONTAL_LINE_COLOR,
-            ls=constants.HORIZONTAL_LINE_STYLE,
+        self._add_horizontal_line(axis=current_axis, y_value=self.anchor_zscore)
+        self._add_horizontal_line(
+            axis=current_axis, y_value=self.anchor_zscore + self.z_threshold
         )
 
         plt.show()
