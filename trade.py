@@ -55,4 +55,4 @@ if __name__ == "__main__":
 
         processor.identify_historical_opportunities(pricing_df=df)
 
-        # processor.visualize_relationship(pricing_df=df)
+        processor.visualize_relationship(pricing_df=df)
