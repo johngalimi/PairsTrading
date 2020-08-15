@@ -1,9 +1,16 @@
 import pandas as pd
 import numpy as np
+import matplotlib.pyplot as plt
 import src.client.constants as constants
 
 
 class TradeProcessor:
+    def __init__(self, window_short, window_long, z_threshold):
+        self.window_short = window_short
+        self.window_long = window_long
+        self.z_threshold = z_threshold
+        self.anchor_zscore = constants.ANCHOR_Z_SCORE
+
     def _calculate_mean(self, column):
         return column.mean()
 
@@ -23,7 +30,47 @@ class TradeProcessor:
             pricing_df[constants.COLUMN_SPREAD] - spread_mean
         ) / spread_stdev
 
-        pricing_df[self._generate_ma_column_label(window=window_short)] = pricing_df[constants.COLUMN_ZSCORE].rolling(window=window_short).mean()
-        pricing_df[self._generate_ma_column_label(window=window_long)] = pricing_df[constants.COLUMN_ZSCORE].rolling(window=window_long).mean()
+        pricing_df[self._generate_ma_column_label(window=self.window_short)] = (
+            pricing_df[constants.COLUMN_ZSCORE].rolling(window=self.window_short).mean()
+        )
+        pricing_df[self._generate_ma_column_label(window=self.window_long)] = (
+            pricing_df[constants.COLUMN_ZSCORE].rolling(window=self.window_long).mean()
+        )
 
         return pricing_df
+
+    def plot_relationship(self, pricing_df):
+
+        current_axis = plt.gca()
+
+        pricing_df.plot.line(
+            x=constants.COLUMN_DATE, y=constants.COLUMN_ZSCORE, ax=current_axis
+        )
+        pricing_df.plot.line(
+            x=constants.COLUMN_DATE,
+            y=self._generate_ma_column_label(window=self.window_short),
+            ax=current_axis,
+        )
+        pricing_df.plot.line(
+            x=constants.COLUMN_DATE,
+            y=self._generate_ma_column_label(window=self.window_long),
+            ax=current_axis,
+        )
+
+        current_axis.axhline(
+            y=self.anchor_zscore - self.z_threshold,
+            color=constants.HORIZONTAL_LINE_COLOR,
+            ls=constants.HORIZONTAL_LINE_STYLE,
+        )
+        current_axis.axhline(
+            y=self.anchor_zscore,
+            color=constants.HORIZONTAL_LINE_COLOR,
+            ls=constants.HORIZONTAL_LINE_STYLE,
+        )
+        current_axis.axhline(
+            y=self.anchor_zscore + self.z_threshold,
+            color=constants.HORIZONTAL_LINE_COLOR,
+            ls=constants.HORIZONTAL_LINE_STYLE,
+        )
+
+        plt.show()

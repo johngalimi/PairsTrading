@@ -42,9 +42,15 @@ if __name__ == "__main__":
 
         MOVING_AVG_SHORT = 10
         MOVING_AVG_LONG = 30
+        Z_THRESHOLD = 1.5
 
-        processor = TradeProcessor()
+        processor = TradeProcessor(
+            window_short=MOVING_AVG_SHORT,
+            window_long=MOVING_AVG_LONG,
+            z_threshold=Z_THRESHOLD,
+        )
         df = processor.calculate_statistics(
             pricing_df=df, window_short=MOVING_AVG_SHORT, window_long=MOVING_AVG_LONG
         )
-        print(df)
+
+        processor.plot_relationship(df)
