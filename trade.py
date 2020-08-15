@@ -53,4 +53,6 @@ if __name__ == "__main__":
             pricing_df=df, window_short=MOVING_AVG_SHORT, window_long=MOVING_AVG_LONG
         )
 
-        processor.visualize_relationship(pricing_df=df)
+        processor.identify_historical_opportunities(pricing_df=df)
+
+        # processor.visualize_relationship(pricing_df=df)

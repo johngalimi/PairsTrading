@@ -39,6 +39,9 @@ class TradeProcessor:
 
         return pricing_df
 
+    def identify_historical_opportunities(self, pricing_df):
+        print(pricing_df)
+
     def _add_horizontal_line(self, axis, y_value):
         axis.axhline(
             y=y_value,
