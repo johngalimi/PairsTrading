@@ -29,7 +29,7 @@ if __name__ == "__main__":
     # holdings = ['AET', 'IQV']
     # holdings = ['BDX', 'AET']
 
-    holdings = ['ALXN', 'MCK']
+    holdings = ["ALXN", "MCK"]
 
     valid_pairs = explorer.explore_universe(
         pair_list=explorer.get_pair_combinations(holdings),
@@ -49,15 +49,11 @@ if __name__ == "__main__":
             window_long=MOVING_AVG_LONG,
             z_threshold=Z_THRESHOLD,
         )
-        df = processor.calculate_statistics(
-            pricing_df=df,
-            window_short=MOVING_AVG_SHORT,
-            window_long=MOVING_AVG_LONG,
-        )
+        df = processor.calculate_statistics(pricing_df=df)
 
         processor.identify_historical_opportunities(pricing_df=df)
 
-        processor.visualize_relationship(pricing_df=df)
+        # processor.visualize_relationship(pricing_df=df)
 
     trader = TradeClient()
 

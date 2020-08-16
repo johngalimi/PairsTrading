@@ -28,7 +28,7 @@ class TradeProcessor:
         if len(securities) == 2:
             return securities[0], securities[1]
 
-    def calculate_statistics(self, pricing_df, window_short, window_long):
+    def calculate_statistics(self, pricing_df):
 
         # critical to maintain consistency as to what is security A vs B
         # this will define our spread and directly inform buy/sells in the strategy
@@ -57,7 +57,15 @@ class TradeProcessor:
         return pricing_df
 
     def identify_historical_opportunities(self, pricing_df):
-        print(pricing_df)
+
+        pricing_df[constants.COLUMN_MOMENTUM] = np.where(
+            pricing_df[self._generate_ma_column_label(window=self.window_short)]
+            >= pricing_df[self._generate_ma_column_label(self.window_long)],
+            1,
+            -1,
+        )
+
+        print(pricing_df.tail(30))
 
     def _add_horizontal_line(self, axis, y_value):
         axis.axhline(
