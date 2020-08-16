@@ -20,11 +20,28 @@ class TradeProcessor:
     def _generate_ma_column_label(self, window):
         return f"{str(window)}{constants.COLUMN_MA_ZSCORE}"
 
-    def calculate_statistics(self, pricing_df, window_short, window_long):
-        spread_column = pricing_df[constants.COLUMN_SPREAD]
+    def _extract_security_names(self, df_columns):
+        securities = list(
+            filter(lambda column_name: column_name != constants.COLUMN_DATE, df_columns)
+        )
 
-        spread_mean = self._calculate_mean(column=spread_column)
-        spread_stdev = self._calculate_stdev(column=spread_column)
+        if len(securities) == 2:
+            return securities[0], securities[1]
+
+    def calculate_statistics(self, pricing_df, window_short, window_long):
+
+        # critical to maintain consistency as to what is security A vs B
+        # this will define our spread and directly inform buy/sells in the strategy
+        security_a, security_b = self._extract_security_names(
+            df_columns=list(pricing_df.columns)
+        )
+
+        pricing_df[constants.COLUMN_SPREAD] = (
+            pricing_df[security_a] / pricing_df[security_b]
+        )
+
+        spread_mean = self._calculate_mean(column=pricing_df[constants.COLUMN_SPREAD])
+        spread_stdev = self._calculate_stdev(column=pricing_df[constants.COLUMN_SPREAD])
 
         pricing_df[constants.COLUMN_ZSCORE] = (
             pricing_df[constants.COLUMN_SPREAD] - spread_mean

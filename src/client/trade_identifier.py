@@ -55,8 +55,16 @@ class TradeIdentifier:
             tolerance=constants.ADFULLER_TOLERANCE,
         )
 
-    def test_relationship(self, ticker_a, ticker_b, pricing_df):
+    def _test_relationship(self, ticker_a, ticker_b, pricing_df):
         is_cointegrated = self._test_cointegration(ticker_a, ticker_b, pricing_df)
         is_stationary = self._test_stationarity(ticker_a, ticker_b, pricing_df)
 
         return is_cointegrated and is_stationary
+
+    def test_and_record_relationship(
+        self, ticker_a, ticker_b, pricing_df, result_array
+    ):
+        if self._test_relationship(
+            ticker_a=ticker_a, ticker_b=ticker_b, pricing_df=pricing_df
+        ):
+            result_array.append((ticker_a, ticker_b))

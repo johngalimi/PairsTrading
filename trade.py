@@ -4,7 +4,9 @@ from src.client.trade_processor import TradeProcessor
 from src.client.trade_explorer import TradeExplorer
 
 import time
-def is_valid_pair(stock_a, stock_b, pricing_df, valid_pairs):
+
+
+def is_valid_pair(stock_a, stock_b, valid_pairs):
     time.sleep(2)
     if stock_a is "GOOG":
         valid_pairs.append((stock_a, stock_b))
@@ -32,45 +34,40 @@ if __name__ == "__main__":
 
         print("\n")
 
-    SECURITY_LIST = ["FB", "GOOG", "AAPL", "MSFT"]
+    # SECURITY_LIST = ["ALXN", "FB", "GOOG", "AAPL", "MSFT", "MCK"]
+    SECURITY_LIST = ["ALXN", "MCK"]
+
+    START = "2015-01-01"
+    END = "2020-01-25"
+    MOVING_AVG_SHORT = 10
+    MOVING_AVG_LONG = 30
+    Z_THRESHOLD = 1.5
+
+    identifier = TradeIdentifier(start_date=START, end_date=END)
 
     explorer = TradeExplorer(universe=SECURITY_LIST)
 
-    valid_pairs = explorer.explore_universe(validation_pointer=is_valid_pair)
+    valid_pairs = explorer.explore_universe(
+        dataset_construction_pointer=identifier.construct_pair_pricing_df,
+        validation_pointer=identifier.test_and_record_relationship,
+    )
 
-    print(valid_pairs)
+    for security_a, security_b in valid_pairs:
 
-    if False:
-
-        STOCK_A = "ALXN"
-        STOCK_B = "MCK"
-
-        START = "2015-01-01"
-        END = "2020-01-25"
-
-        identifier = TradeIdentifier(start_date=START, end_date=END)
-
-        df = identifier.construct_pair_pricing_df(ticker_a=STOCK_A, ticker_b=STOCK_B)
-
-        is_valid_pair = identifier.test_relationship(
-            ticker_a=STOCK_A, ticker_b=STOCK_B, pricing_df=df
+        # there's a layer of redundancy here, we also construct the df in the validation step
+        df = identifier.construct_pair_pricing_df(
+            ticker_a=security_a, ticker_b=security_b
         )
 
-        if is_valid_pair:
+        processor = TradeProcessor(
+            window_short=MOVING_AVG_SHORT,
+            window_long=MOVING_AVG_LONG,
+            z_threshold=Z_THRESHOLD,
+        )
+        df = processor.calculate_statistics(
+            pricing_df=df, window_short=MOVING_AVG_SHORT, window_long=MOVING_AVG_LONG,
+        )
 
-            MOVING_AVG_SHORT = 10
-            MOVING_AVG_LONG = 30
-            Z_THRESHOLD = 1.5
+        processor.identify_historical_opportunities(pricing_df=df)
 
-            processor = TradeProcessor(
-                window_short=MOVING_AVG_SHORT,
-                window_long=MOVING_AVG_LONG,
-                z_threshold=Z_THRESHOLD,
-            )
-            df = processor.calculate_statistics(
-                pricing_df=df, window_short=MOVING_AVG_SHORT, window_long=MOVING_AVG_LONG
-            )
-
-            processor.identify_historical_opportunities(pricing_df=df)
-
-            processor.visualize_relationship(pricing_df=df)
+        processor.visualize_relationship(pricing_df=df)
