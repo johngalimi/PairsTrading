@@ -4,20 +4,25 @@ from itertools import combinations
 
 
 class TradeExplorer:
-    def __init__(self, universe):
-        self.pairs = self._get_pair_combinations(universe)
+    def __init__(self, securities):
+        self.securities = securities
 
-    def _get_pair_combinations(self, universe):
+    def get_pair_combinations(self, universe=None):
+        if universe is None:
+            universe=self.securities
+
         return list(combinations(universe, 2))
 
-    def explore_universe(self, dataset_construction_pointer, validation_pointer):
+    def explore_universe(
+        self, pair_list, dataset_construction_pointer, validation_pointer
+    ):
         start = time.time()
         processes = []
 
         manager = multiprocessing.Manager()
         result = manager.list()
 
-        for security_a, security_b in self.pairs:
+        for security_a, security_b in pair_list:
             pricing_df = dataset_construction_pointer(security_a, security_b)
 
             # this should be more defensive + unpack arg tuples of varying lengths

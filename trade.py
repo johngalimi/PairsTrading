@@ -8,6 +8,7 @@ import time
 
 if __name__ == "__main__":
     SECURITY_LIST = ["ALXN", "FB", "GOOG", "AAPL", "MSFT", "MCK"]
+    SECURITY_LIST = ["ALXN", "MCK"]
 
     START = "2015-01-01"
     END = "2020-01-25"
@@ -17,9 +18,10 @@ if __name__ == "__main__":
 
     identifier = TradeIdentifier(start_date=START, end_date=END)
 
-    explorer = TradeExplorer(universe=SECURITY_LIST)
+    explorer = TradeExplorer(securities=SECURITY_LIST)
 
     valid_pairs = explorer.explore_universe(
+        pair_list=explorer.get_pair_combinations(),
         dataset_construction_pointer=identifier.construct_pair_pricing_df,
         validation_pointer=identifier.test_and_record_relationship,
     )
