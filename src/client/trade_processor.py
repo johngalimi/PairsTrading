@@ -65,6 +65,11 @@ class TradeProcessor:
             -1,
         )
 
+        # pricing_df[constants.]
+
+        # save mean / std at z score entry, can calc a new z score for each new entry
+        # this'll be used as the decision point w/ the threshold as to whether to hold or exit
+
         print(pricing_df.tail(30))
 
     def _add_horizontal_line(self, axis, y_value):
