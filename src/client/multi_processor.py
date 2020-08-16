@@ -1,5 +1,6 @@
 import time
 import multiprocessing
+from itertools import combinations
 
 
 def is_prime(n):
@@ -26,23 +27,47 @@ def check_single_digit(number, prime_array):
     prime_array.append({number: is_prime(number)})
 
 
+class TradeExplorer:
+    def __init__(self, universe):
+        self.pairs = self._get_pair_combinations(universe)
+
+    def _get_pair_combinations(self, universe):
+        return list(combinations(universe, 2))
+
+    def is_valid_pair(self, stock_a, stock_b, valid_pairs):
+        time.sleep(2)
+        if stock_a is "GOOG":
+            valid_pairs.append(f"{stock_a}+{stock_b}")
+
+    def explore_universe(self):
+        start = time.time()
+        processes = []
+
+        manager = multiprocessing.Manager()
+        result = manager.list()
+
+        for security_a, security_b in self.pairs:
+            print(security_a, security_b)
+
+            p = multiprocessing.Process(
+                target=self.is_valid_pair, args=(security_a, security_b, result)
+            )
+            processes.append(p)
+            p.start()
+
+        for process in processes:
+            process.join()
+
+        print(result)
+        print(f"Time Elapsed: {time.time() - start}")
+
+        # return result
+
+
 if __name__ == "__main__":
 
-    start = time.time()
-    processes = []
+    SECURITY_LIST = ["FB", "GOOG", "AAPL", "MSFT"]
 
-    manager = multiprocessing.Manager()
-    prime_numbers = manager.list()
+    explorer = TradeExplorer(universe=SECURITY_LIST)
 
-    for number in range(1, 10):
-        p = multiprocessing.Process(
-            target=check_single_digit, args=(number, prime_numbers)
-        )
-        processes.append(p)
-        p.start()
-
-    for process in processes:
-        process.join()
-
-    print(prime_numbers)
-    print(f"Time Elapsed: {time.time() - start}")
+    explorer.explore_universe()
