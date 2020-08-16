@@ -6,12 +6,17 @@ TRANSACTIONS_ENDPOINT = "/transactions"
 POSITIONS_ENDPOINT = "/positions"
 TRANSACTION_ENDPOINT = "/transaction"
 
+SPY_HOLDINGS_FILE = "src/client/spy_holdings.csv"
+
 FIELD_TICKER = "ticker"
 FIELD_PRICE = "price"
 FIELD_QUANTITY = "quantity"
 
 FREQUENCY_DAILY = "1d"
 
+COLUMN_SECTOR = "Sector"
+COLUMN_TICKER = "Ticker"
+COLUMN_WEIGHT = "Weight"
 COLUMN_CLOSE = "Close"
 COLUMN_DATE = "Date"
 COLUMN_SPREAD = "spread"
@@ -24,3 +29,16 @@ ADFULLER_TOLERANCE = 0.05
 ANCHOR_Z_SCORE = 0
 HORIZONTAL_LINE_STYLE = "--"
 HORIZONTAL_LINE_COLOR = "black"
+
+SECTOR_INFORMATION_TECHNOLOGY = "Information Technology"
+SECTOR_CONSUMER_DISCRETIONARY = "Consumer Discretionary"
+SECTOR_COMMUNICATION_SERVICES = "Communication Services"
+SECTOR_FINANCIALS = "Financials"
+SECTOR_HEALTH_CARE = "Health Care"
+SECTOR_CONSUMER_STAPLES = "Consumer Staples"
+SECTOR_ENERGY = "Energy"
+SECTOR_UTILITIES = "Utilities"
+SECTOR_MATERIALS = "Materials"
+SECTOR_INDUSTRIALS = "Industrials"
+SECTOR_REAL_ESTATE = "Real Estate"
+SECTOR_UNASSIGNED = "Unassigned"

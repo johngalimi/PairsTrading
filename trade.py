@@ -2,26 +2,37 @@ from src.client.trade_client import TradeClient
 from src.client.trade_identifier import TradeIdentifier
 from src.client.trade_processor import TradeProcessor
 from src.client.trade_explorer import TradeExplorer
-
-import time
+import src.client.constants as constants
 
 
 if __name__ == "__main__":
-    SECURITY_LIST = ["ALXN", "FB", "GOOG", "AAPL", "MSFT", "MCK"]
     SECURITY_LIST = ["ALXN", "MCK"]
 
-    START = "2015-01-01"
-    END = "2020-01-25"
+    START_DATE = "2015-01-01"
+    END_DATE = "2020-01-25"
     MOVING_AVG_SHORT = 10
     MOVING_AVG_LONG = 30
-    Z_THRESHOLD = 1.5
+    Z_THRESHOLD = 1
 
-    identifier = TradeIdentifier(start_date=START, end_date=END)
+    identifier = TradeIdentifier(start_date=START_DATE, end_date=END_DATE)
 
-    explorer = TradeExplorer(securities=SECURITY_LIST)
+    explorer = TradeExplorer()
+
+    holdings = explorer.get_spy_holdings(sector=constants.SECTOR_CONSUMER_STAPLES)
+
+    # holdings = ["WMT", "EL"]
+    # holdings = ["PG", "HSY"]
+    # holdings = ['PH', 'ROK']
+    # holdings = ['TMO', 'RMD']
+    # holdings = ['XOM', 'PXD']
+    # holdings = ['NTRS', 'HBAN']
+    # holdings = ['AET', 'IQV']
+    # holdings = ['BDX', 'AET']
+
+    holdings = ['ALXN', 'MCK']
 
     valid_pairs = explorer.explore_universe(
-        pair_list=explorer.get_pair_combinations(),
+        pair_list=explorer.get_pair_combinations(holdings),
         dataset_construction_pointer=identifier.construct_pair_pricing_df,
         validation_pointer=identifier.test_and_record_relationship,
     )
@@ -39,7 +50,9 @@ if __name__ == "__main__":
             z_threshold=Z_THRESHOLD,
         )
         df = processor.calculate_statistics(
-            pricing_df=df, window_short=MOVING_AVG_SHORT, window_long=MOVING_AVG_LONG,
+            pricing_df=df,
+            window_short=MOVING_AVG_SHORT,
+            window_long=MOVING_AVG_LONG,
         )
 
         processor.identify_historical_opportunities(pricing_df=df)

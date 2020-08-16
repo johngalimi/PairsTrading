@@ -1,15 +1,32 @@
 import time
 import multiprocessing
+import pandas as pd
 from itertools import combinations
+import src.client.constants as constants
 
 
 class TradeExplorer:
-    def __init__(self, securities):
-        self.securities = securities
+    def get_spy_holdings(self, sector=None):
+        df = pd.read_csv(constants.SPY_HOLDINGS_FILE)
+
+        if sector is None:
+            df = df[df[constants.COLUMN_SECTOR] != constants.SECTOR_UNASSIGNED]
+        else:
+            df = df[df[constants.COLUMN_SECTOR] == sector]
+
+        df = df[
+            [constants.COLUMN_TICKER, constants.COLUMN_SECTOR, constants.COLUMN_WEIGHT]
+        ]
+
+        df = df[~df[constants.COLUMN_TICKER].str.contains("\.")]
+
+        print(f"{sector}: {len(df)}")
+
+        return df[constants.COLUMN_TICKER].to_list()
 
     def get_pair_combinations(self, universe=None):
         if universe is None:
-            universe=self.securities
+            universe = []
 
         return list(combinations(universe, 2))
 
