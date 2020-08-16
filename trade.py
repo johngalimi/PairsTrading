@@ -34,8 +34,8 @@ if __name__ == "__main__":
 
         print("\n")
 
-    # SECURITY_LIST = ["ALXN", "FB", "GOOG", "AAPL", "MSFT", "MCK"]
-    SECURITY_LIST = ["ALXN", "MCK"]
+    SECURITY_LIST = ["ALXN", "FB", "GOOG", "AAPL", "MSFT", "MCK"]
+    # SECURITY_LIST = ["ALXN", "MCK"]
 
     START = "2015-01-01"
     END = "2020-01-25"

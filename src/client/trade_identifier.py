@@ -64,7 +64,10 @@ class TradeIdentifier:
     def test_and_record_relationship(
         self, ticker_a, ticker_b, pricing_df, result_array
     ):
-        if self._test_relationship(
+        is_valid_relationship = self._test_relationship(
             ticker_a=ticker_a, ticker_b=ticker_b, pricing_df=pricing_df
-        ):
+        )
+        if is_valid_relationship:
             result_array.append((ticker_a, ticker_b))
+
+        print(ticker_a, ticker_b, is_valid_relationship)
