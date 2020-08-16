@@ -6,36 +6,8 @@ from src.client.trade_explorer import TradeExplorer
 import time
 
 
-def is_valid_pair(stock_a, stock_b, valid_pairs):
-    time.sleep(2)
-    if stock_a is "GOOG":
-        valid_pairs.append((stock_a, stock_b))
-
-
 if __name__ == "__main__":
-    trader = TradeClient()
-
-    if trader.probe_server():
-
-        transaction = trader.execute_transaction(ticker="FB", price=182.76, quantity=12)
-        transaction = trader.execute_transaction(ticker="FB", price=190.1, quantity=-8)
-        transaction = trader.execute_transaction(ticker="F", price=50, quantity=8)
-        transaction = trader.execute_transaction(
-            ticker="AAPL", price=221.23, quantity=-3
-        )
-
-        transactions = trader.get_transactions()
-        print("Transactions:", transactions)
-
-        print("\n")
-
-        positions = trader.get_positions()
-        print("Positions:", positions)
-
-        print("\n")
-
     SECURITY_LIST = ["ALXN", "FB", "GOOG", "AAPL", "MSFT", "MCK"]
-    # SECURITY_LIST = ["ALXN", "MCK"]
 
     START = "2015-01-01"
     END = "2020-01-25"
@@ -71,3 +43,24 @@ if __name__ == "__main__":
         processor.identify_historical_opportunities(pricing_df=df)
 
         processor.visualize_relationship(pricing_df=df)
+
+    trader = TradeClient()
+
+    if trader.probe_server():
+
+        transaction = trader.execute_transaction(ticker="FB", price=182.76, quantity=12)
+        transaction = trader.execute_transaction(ticker="FB", price=190.1, quantity=-8)
+        transaction = trader.execute_transaction(ticker="F", price=50, quantity=8)
+        transaction = trader.execute_transaction(
+            ticker="AAPL", price=221.23, quantity=-3
+        )
+
+        transactions = trader.get_transactions()
+        print("Transactions:", transactions)
+
+        print("\n")
+
+        positions = trader.get_positions()
+        print("Positions:", positions)
+
+        print("\n")
