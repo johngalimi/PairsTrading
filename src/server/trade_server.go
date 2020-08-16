@@ -32,6 +32,7 @@ func getTransactions(w http.ResponseWriter, r *http.Request) {
 	json.NewEncoder(w).Encode(Transactions)
 }
 
+// we should have a handler that checks acct balance / validity of transaction first
 func executeTransaction(w http.ResponseWriter, r *http.Request) {
 	// method to execute transaction
 	// BUY --> curl -X POST -H 'Content-Type: application/json' -d "{\"ticker\":\"FB\", \"price\":182.76, \"quantity\":15}" localhost:8090/transaction
