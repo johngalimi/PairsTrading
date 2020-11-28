@@ -1,6 +1,7 @@
 # Pairs Trading
 
 ```bash
+# containerized workflow when code change occurs
 docker build -t pairstrading .
 docker run -it pairstrading
 
