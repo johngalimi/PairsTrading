@@ -4,6 +4,7 @@
 docker build -t pairstrading .
 docker run -it pairstrading
 
+# complete each time a dependency is added
 pip freeze > requirements.txt
 ```
 
