@@ -1,8 +1,8 @@
-from src.client.trade_client import TradeClient
-from src.client.trade_identifier import TradeIdentifier
-from src.client.trade_processor import TradeProcessor
-from src.client.trade_explorer import TradeExplorer
-import src.client.constants as constants
+from client.trade_client import TradeClient
+from client.trade_identifier import TradeIdentifier
+from client.trade_processor import TradeProcessor
+from client.trade_explorer import TradeExplorer
+import client.constants as constants
 
 
 if __name__ == "__main__":

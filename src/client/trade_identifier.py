@@ -1,7 +1,7 @@
 import yfinance as yf
 import pandas as pd
 from statsmodels.tsa.stattools import coint, adfuller
-import src.client.constants as constants
+import client.constants as constants
 
 
 class TradeIdentifier:

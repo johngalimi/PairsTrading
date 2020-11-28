@@ -6,7 +6,7 @@ TRANSACTIONS_ENDPOINT = "/transactions"
 POSITIONS_ENDPOINT = "/positions"
 TRANSACTION_ENDPOINT = "/transaction"
 
-SPY_HOLDINGS_FILE = "src/client/spy_holdings.csv"
+SPY_HOLDINGS_FILE = "client/spy_holdings.csv"
 
 FIELD_TICKER = "ticker"
 FIELD_PRICE = "price"

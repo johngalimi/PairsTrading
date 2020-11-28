@@ -2,7 +2,7 @@ import time
 import multiprocessing
 import pandas as pd
 from itertools import combinations
-import src.client.constants as constants
+import client.constants as constants
 
 
 class TradeExplorer:
