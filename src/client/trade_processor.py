@@ -58,6 +58,12 @@ class TradeProcessor:
 
     def identify_historical_opportunities(self, pricing_df):
 
+        pricing_df[
+            self._generate_ma_column_label(window=self.window_short) + "_prev"
+        ] = pricing_df[self._generate_ma_column_label(window=self.window_short)].shift(
+            1
+        )
+
         pricing_df[constants.COLUMN_MOMENTUM] = np.where(
             pricing_df[self._generate_ma_column_label(window=self.window_short)]
             >= pricing_df[self._generate_ma_column_label(self.window_long)],
@@ -65,12 +71,13 @@ class TradeProcessor:
             -1,
         )
 
-        # pricing_df[constants.]
+        # pos prev < +short
+        # neg prev > -short --> abs(prev) > abs(short)
 
         # save mean / std at z score entry, can calc a new z score for each new entry
         # this'll be used as the decision point w/ the threshold as to whether to hold or exit
 
-        print(pricing_df.tail(30))
+        print(pricing_df.tail(10))
 
     def _add_horizontal_line(self, axis, y_value):
         axis.axhline(
@@ -80,6 +87,8 @@ class TradeProcessor:
         )
 
     def visualize_relationship(self, pricing_df):
+
+        pd.set_option('display.max_columns', 100)
 
         current_axis = plt.gca()
 

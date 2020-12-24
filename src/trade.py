@@ -18,7 +18,7 @@ if __name__ == "__main__":
 
     explorer = TradeExplorer()
 
-    holdings = explorer.get_spy_holdings(sector=constants.SECTOR_CONSUMER_STAPLES)
+    # holdings = explorer.get_spy_holdings(sector=constants.SECTOR_CONSUMER_STAPLES)
 
     # holdings = ["WMT", "EL"]
     # holdings = ["PG", "HSY"]
